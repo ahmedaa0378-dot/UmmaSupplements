@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UMMA Supplements
 
-## Getting Started
+Storefront for ummasupplements.com. Next.js (App Router), Tailwind CSS, to be hosted on Vercel with Supabase for data, sign-in and media.
 
-First, run the development server:
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What is built
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Design system: colours, type and buttons in `src/app/globals.css`
+- Homepage, shop, a page per product, and the halal promise page
+- Cart drawer (saved on the device), chat launcher with the U mark, first-visit offer
 
-## Learn More
+## Where things live
 
-To learn more about Next.js, take a look at the following resources:
+| What | Where |
+| --- | --- |
+| All text, prices, products, offers | `src/content/site.ts` |
+| Content access (swap to Supabase here) | `src/lib/content.ts` |
+| Database schema (not applied yet) | `supabase/schema.sql` |
+| Images | `public/img` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Not connected yet
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Supabase (content, sign-in, discount codes)
+- Razorpay checkout and Shiprocket delivery
+- Admin portal
+- AI answers in the chat (it answers the fixed questions and links to WhatsApp)
+- Films: every film slot shows its shot description until a video URL is supplied
 
-## Deploy on Vercel
+## Before launch
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Items marked `placeholder: true` in `src/content/site.ts` must be replaced: prices, the launch offer and the halal certificate details. The nutrition panel is left off the site until the label is corrected.

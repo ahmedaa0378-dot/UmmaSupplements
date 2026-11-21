@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* UMMA design tokens. Green and cream come from the logo; gold from the pack. */
+@theme {
+  --color-green: #0f3d2e;
+  --color-green-deep: #0a2b20;
+  --color-green-soft: #2c5a49;
+  --color-cream: #f3eee6;
+  --color-paper: #fbf9f4;
+  --color-stone: #e6e0d4;
+  --color-gold: #b8923f;
+  --color-gold-soft: #e4d3a6;
+  --color-ink: #16211c;
+  --color-muted: #5d665f;
+
+  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 16px;
+  --radius-panel: 28px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px) {
+    .wrap {
+      padding-inline: 40px;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 26px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--color-green);
+    color: var(--color-cream);
+  }
+  .btn-primary:hover {
+    background: var(--color-green-deep);
+  }
+  .btn-light {
+    background: var(--color-cream);
+    color: var(--color-green);
+  }
+  .btn-light:hover {
+    background: #fff;
+  }
+  .btn-outline {
+    border: 1.5px solid var(--color-green);
+    color: var(--color-green);
+  }
+  .btn-outline:hover {
+    background: var(--color-green);
+    color: var(--color-cream);
+  }
+  .btn-outline-light {
+    border: 1.5px solid var(--color-cream);
+    color: var(--color-cream);
+  }
+  .btn-outline-light:hover {
+    background: var(--color-cream);
+    color: var(--color-green);
+  }
+  .btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .link {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
