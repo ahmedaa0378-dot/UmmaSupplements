@@ -147,22 +147,24 @@ export const home = {
     body: "Unflavoured bovine collagen peptides. The halal certificate is published here in full, with its issuer, number, expiry date and a link to check it yourself.",
     primary: { label: "Shop collagen", href: "/products/halal-collagen" },
     secondary: { label: "See the certificate", href: "/halal" },
-    poster: "/img/collagen-jar.webp",
-    video: "", // add an MP4/WebM URL here; the poster shows until then
+    // Films are AI-generated from the real pack photo and hosted on Higgsfield for now.
+    // Move them to Supabase Storage when it is connected.
+    poster: "https://d2ol7oe51mr4n9.cloudfront.net/user_3ERuOLOcSAKrbtluQTkpx3uZlfE/06eb989d-d92a-441b-8b5c-0b2e519c5598.jpg",
+    video: "https://d2ol7oe51mr4n9.cloudfront.net/user_3ERuOLOcSAKrbtluQTkpx3uZlfE/526eca9d-f45a-40bc-8e58-eb8d9c250d11.mp4",
     film: "Morning ritual, 8 seconds: a woman in a hijab stirs one scoop into her cup, then sets the jar down with the halal mark facing camera.",
   },
   ritual: {
     heading: "One scoop, once a day.",
     body: "It has no taste, so it goes into whatever is already in your cup.",
     films: [
-      "Close on hands: a level scoop lifted from the jar.",
-      "The scoop tipped into a cup of warm chai, powder dissolving.",
-      "She stirs, lifts the cup and smiles. Hijab, soft morning light.",
+      { shot: "Close on hands: a level scoop lifted from the jar.", video: "https://d2ol7oe51mr4n9.cloudfront.net/user_3ERuOLOcSAKrbtluQTkpx3uZlfE/58b1b798-b2dc-439f-a09e-9e3875cfa136.mp4" },
+      { shot: "The scoop tipped into a cup of warm chai.", video: "https://d2ol7oe51mr4n9.cloudfront.net/user_3ERuOLOcSAKrbtluQTkpx3uZlfE/e828905c-766e-40ab-960a-c1448e94c3bb.mp4" },
+      { shot: "She stirs, lifts the cup and smiles. Hijab, soft morning light.", video: "https://d2ol7oe51mr4n9.cloudfront.net/user_3ERuOLOcSAKrbtluQTkpx3uZlfE/6ad5ea70-659b-4ea1-a77c-788ddbbbdd02.mp4" },
     ],
   },
   films: {
     heading: "How it fits into her day",
-    body: "Short films from real routines. Tap one to see the product in it.",
+    body: "Four moments in the day when one scoop fits in.",
     items: [
       { title: "After fajr", shot: "Kitchen counter at dawn, scoop into warm water. Woman, late 30s, hijab." },
       { title: "With morning chai", shot: "Two cups on a tray, she stirs one. Abaya, family home." },

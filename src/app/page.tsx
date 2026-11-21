@@ -32,7 +32,7 @@ export default async function HomePage() {
             </div>
           </div>
           <FilmSlot
-            className="aspect-[3/2] md:col-span-7"
+            className="aspect-video md:col-span-7"
             shot={home.hero.film}
             video={home.hero.video}
             poster={home.hero.poster}

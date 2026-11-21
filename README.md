@@ -32,7 +32,7 @@ Open http://localhost:3000.
 - Razorpay checkout and Shiprocket delivery
 - Admin portal
 - AI answers in the chat (it answers the fixed questions and links to WhatsApp)
-- Films: every film slot shows its shot description until a video URL is supplied
+- Films: the hero and three ritual films are AI-generated (Higgsfield) and hosted there for now; the other slots show their shot description until a video URL is supplied
 
 ## Before launch
 

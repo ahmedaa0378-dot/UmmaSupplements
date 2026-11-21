@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { LoopVideo } from "./LoopVideo";
 
 /*
   A slot for a short, muted, looping film. Until a video file is supplied it shows the
@@ -26,16 +27,7 @@ export function FilmSlot({ shot, video, poster, posterAlt = "", tone = "stone", 
       } ${className}`}
     >
       {video ? (
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          src={video}
-          poster={poster}
-          muted
-          loop
-          playsInline
-          autoPlay
-          preload="metadata"
-        />
+        <LoopVideo src={video} poster={poster} eager={priority} label={shot} />
       ) : (
         poster && (
           <Image
