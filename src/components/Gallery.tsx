@@ -10,7 +10,7 @@ export function Gallery({ slides }: { slides: Slide[] }) {
   const slide = slides[at];
 
   return (
-    <div>
+    <div className="min-w-0">
       <div className={`relative aspect-[4/5] overflow-hidden rounded-[var(--radius-panel)] ${slide.fit === "contain" ? "bg-white" : "bg-stone"}`}>
         <Image
           key={slide.image}
