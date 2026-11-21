@@ -1,4 +1,4 @@
-import { certificate, company, home, nav, products } from "@/content/site";
+import { certificate, company, guide, home, nav, products, reviews } from "@/content/site";
 
 /*
   Single entry point for content. Pages only call these functions, so when Supabase is
@@ -27,4 +27,12 @@ export async function getCompany() {
 
 export async function getNav() {
   return nav;
+}
+
+export async function getReviews() {
+  return reviews;
+}
+
+export async function getGuide() {
+  return guide;
 }

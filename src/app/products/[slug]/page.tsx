@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PackPicker } from "@/components/AddToCart";
-import { CertificateCard } from "@/components/CertificateCard";
 import { Faq } from "@/components/Faq";
-import { FilmSlot } from "@/components/FilmSlot";
+import { Gallery } from "@/components/Gallery";
+import { Research } from "@/components/Research";
+import { Reviews } from "@/components/Reviews";
 import { Ritual } from "@/components/Ritual";
-import { getCertificate, getCompany, getHome, getProduct, getProducts } from "@/lib/content";
+import { getCompany, getHome, getProduct, getProducts, getReviews } from "@/lib/content";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -24,29 +24,17 @@ export default async function ProductPage({ params }: Params) {
   const product = await getProduct((await params).slug);
   if (!product) notFound();
 
-  const [home, cert, company] = await Promise.all([getHome(), getCertificate(), getCompany()]);
+  const [home, company, reviews] = await Promise.all([getHome(), getCompany(), getReviews()]);
   const isCollagen = product.slug === "halal-collagen";
   const isSupplement = product.kind === "Food supplement";
+  const howToImage = product.gallery[1] ?? product.gallery[0];
 
   return (
     <>
-      {/* Hero */}
+      {/* Hero: gallery and buy box */}
       <section className="bg-cream">
         <div className="wrap grid gap-10 py-10 md:grid-cols-2 md:gap-14 md:py-16">
-          <div
-            className={`relative overflow-hidden rounded-[var(--radius-panel)] bg-stone ${
-              product.portrait ? "aspect-[4/5]" : "aspect-[4/5] md:aspect-auto md:min-h-[560px]"
-            }`}
-          >
-            <Image
-              src={product.image}
-              alt={product.imageAlt}
-              fill
-              priority
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-            />
-          </div>
+          <Gallery slides={product.gallery} />
 
           <div className="md:py-6">
             <p className="text-muted">
@@ -80,13 +68,36 @@ export default async function ProductPage({ params }: Params) {
         </div>
       </section>
 
+      {/* Benefits (collagen) */}
+      {isCollagen && (
+        <section className="wrap py-20 md:py-28">
+          <div className="mb-12 max-w-[560px]">
+            <h2 className="text-[36px] md:text-[48px]">{home.benefits.heading}</h2>
+            <p className="mt-4 text-lg text-muted">{home.benefits.body}</p>
+          </div>
+          <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {home.benefits.items.map((b) => (
+              <article key={b.title}>
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-stone">
+                  <Image src={b.image} alt={b.alt} fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover" />
+                </div>
+                <h3 className="mt-5 text-[28px]">{b.title}</h3>
+                <p className="mt-2 text-muted">{b.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {isCollagen && <Research {...home.research} />}
+
       {/* How to use */}
       <section className="wrap py-20 md:py-28">
         <h2 className="mb-12 text-[36px] md:text-[48px]">How to use it</h2>
         {isCollagen ? (
           <Ritual steps={product.howTo} films={home.ritual.films} />
         ) : (
-          <div className="grid gap-10 md:grid-cols-2 md:gap-14">
+          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-14">
             <ol className="space-y-6">
               {product.howTo.map((s, i) => (
                 <li key={s} className="flex gap-4">
@@ -97,56 +108,42 @@ export default async function ProductPage({ params }: Params) {
                 </li>
               ))}
             </ol>
-            <FilmSlot shot={product.heroFilm} className="aspect-[4/3]" />
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-panel)] bg-stone">
+              <Image
+                src={howToImage.image}
+                alt={howToImage.alt}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         )}
       </section>
 
-      {/* Product film (collagen) */}
-      {isCollagen && (
-        <section className="wrap pb-20 md:pb-28">
-          <FilmSlot shot={product.heroFilm} tone="green" className="aspect-[4/5] md:aspect-[21/9]" />
-        </section>
-      )}
-
-      {/* Halal certificate */}
+      {/* Label statements */}
       {isSupplement && (
-        <section className="bg-green text-cream">
-          <div className="wrap grid items-center gap-12 py-20 md:grid-cols-2 md:gap-16 md:py-28">
-            <div>
-              <h2 className="text-[36px] md:text-[48px]">Halal, with the paperwork to show it.</h2>
-              <p className="mt-6 max-w-[48ch] text-lg text-cream/80">
-                Each UMMA food supplement carries its own certificate record. Check the issuer and number against the
-                certifying body before you buy.
+        <section className="bg-cream">
+          <div className="wrap grid gap-10 py-20 md:grid-cols-12 md:py-28">
+            <h2 className="text-[36px] md:col-span-4 md:text-[48px]">On the label</h2>
+            <div className="space-y-4 text-lg md:col-span-8">
+              {company.statements.map((s) => (
+                <p key={s}>{s}</p>
+              ))}
+              <p>
+                If you are pregnant, breastfeeding, taking medication or have a medical condition, consult a healthcare
+                professional before use.
               </p>
-              <Link href="/halal" className="btn btn-outline-light mt-8">
-                Read our halal promise
-              </Link>
+              <p>Store in a cool, dry place with the lid tightly closed.</p>
+              <p className="pt-4 text-base text-muted">
+                The full nutrition panel will be published here once it is confirmed with the manufacturer.
+              </p>
             </div>
-            <CertificateCard cert={{ ...cert, product: product.name }} />
           </div>
         </section>
       )}
 
-      {/* Label statements and nutrition */}
-      {isSupplement && (
-        <section className="wrap grid gap-10 py-20 md:grid-cols-12 md:py-28">
-          <h2 className="text-[36px] md:col-span-4 md:text-[48px]">On the label</h2>
-          <div className="space-y-4 text-lg md:col-span-8">
-            {company.statements.map((s) => (
-              <p key={s}>{s}</p>
-            ))}
-            <p>
-              If you are pregnant, breastfeeding, taking medication or have a medical condition, consult a healthcare
-              professional before use.
-            </p>
-            <p>Store in a cool, dry place with the lid tightly closed.</p>
-            <p className="pt-4 text-base text-muted">
-              The full nutrition panel will be published here once it is confirmed with the manufacturer.
-            </p>
-          </div>
-        </section>
-      )}
+      <Reviews items={reviews.items} />
 
       {/* Questions */}
       {isCollagen && (

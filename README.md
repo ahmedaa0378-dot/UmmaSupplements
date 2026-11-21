@@ -14,7 +14,8 @@ Open http://localhost:3000.
 ## What is built
 
 - Design system: colours, type and buttons in `src/app/globals.css`
-- Homepage, shop, a page per product, and the halal promise page
+- Homepage, shop, a page per product with an image gallery, and the collagen guide
+- Research section with links to the published studies; reviews section (shows a marked sample layout until real reviews exist)
 - Cart drawer (saved on the device), chat launcher with the U mark, first-visit offer
 
 ## Where things live
@@ -24,7 +25,8 @@ Open http://localhost:3000.
 | All text, prices, products, offers | `src/content/site.ts` |
 | Content access (swap to Supabase here) | `src/lib/content.ts` |
 | Database schema (not applied yet) | `supabase/schema.sql` |
-| Images | `public/img` |
+| Pack shots and logo | `public/img` |
+| Generated images and films | `src/content/media.ts` |
 
 ## Not connected yet
 
@@ -32,7 +34,7 @@ Open http://localhost:3000.
 - Razorpay checkout and Shiprocket delivery
 - Admin portal
 - AI answers in the chat (it answers the fixed questions and links to WhatsApp)
-- Films: the hero and three ritual films are AI-generated (Higgsfield) and hosted there for now; the other slots show their shot description until a video URL is supplied
+- Imagery and films are AI-generated (Higgsfield) and hosted there for now; URLs are in `src/content/media.ts`
 
 ## Before launch
 
