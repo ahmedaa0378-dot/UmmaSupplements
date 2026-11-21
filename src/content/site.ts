@@ -9,7 +9,7 @@ import { media } from "./media";
 export type Pack = { id: string; label: string; note?: string; price: number; compareAt?: number };
 
 /* A gallery slide is a photo, optionally with a short title and points laid over it. */
-export type Slide = { image: string; alt: string; title?: string; points?: string[] };
+export type Slide = { image: string; alt: string; title?: string; points?: string[]; fit?: "contain" };
 
 export type Product = {
   slug: string;
@@ -128,7 +128,7 @@ export const products: Product[] = [
     image: "/img/henna.webp",
     imageAlt: "UMMA Premium Henna Powder pouch, 250 g",
     gallery: [
-      { image: "/img/henna.webp", alt: "UMMA Premium Henna Powder pouch, 250 g" },
+      { image: "/img/henna.webp", alt: "UMMA Premium Henna Powder pouch, 250 g", fit: "contain" },
       {
         image: media.hennaPaste,
         alt: "A wooden bowl of smooth henna paste beside henna powder and leaves",
@@ -165,7 +165,7 @@ export const products: Product[] = [
     image: "/img/multani-mitti.webp",
     imageAlt: "UMMA Premium Multani Mitti pouch, 250 g",
     gallery: [
-      { image: "/img/multani-mitti.webp", alt: "UMMA Premium Multani Mitti pouch, 250 g" },
+      { image: "/img/multani-mitti.webp", alt: "UMMA Premium Multani Mitti pouch, 250 g", fit: "contain" },
       {
         image: media.multaniPaste,
         alt: "A bowl of clay paste with a brush, rose petals and rose water",

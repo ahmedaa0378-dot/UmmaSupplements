@@ -11,7 +11,7 @@ export function Gallery({ slides }: { slides: Slide[] }) {
 
   return (
     <div>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-panel)] bg-stone">
+      <div className={`relative aspect-[4/5] overflow-hidden rounded-[var(--radius-panel)] ${slide.fit === "contain" ? "bg-white" : "bg-stone"}`}>
         <Image
           key={slide.image}
           src={slide.image}
@@ -19,7 +19,7 @@ export function Gallery({ slides }: { slides: Slide[] }) {
           fill
           priority={at === 0}
           sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-cover"
+          className={slide.fit === "contain" ? "object-contain" : "object-cover"}
         />
         {slide.title && (
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-green-deep/95 via-green-deep/70 to-transparent px-6 pb-6 pt-24 text-cream md:px-8 md:pb-8">
