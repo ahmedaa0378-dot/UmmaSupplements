@@ -15,10 +15,11 @@ export type Product = {
   slug: string;
   name: string;
   short: string;
-  kind: "Food supplement" | "Personal care";
+  kind: "Food supplement" | "Food" | "Personal care";
   size: string;
   image: string;
   imageAlt: string;
+  tone: string; // the pack colour, used behind the product on cards
   gallery: Slide[];
   packs: Pack[]; // empty = price not set yet
   pricePlaceholder: boolean;
@@ -28,73 +29,144 @@ export type Product = {
   howTo: string[];
 };
 
+const collagenHowTo = [
+  "Measure 10 g, which is one level scoop.",
+  "Stir it into 250 ml of warm chai, coffee, water, a smoothie or yogurt.",
+  "Drink it once a day, at whatever time you will remember.",
+];
+
 export const products: Product[] = [
   {
-    slug: "halal-collagen",
-    name: "Halal Collagen Protein",
-    short: "Unflavoured bovine collagen peptides",
+    slug: "collagen",
+    name: "Bovine Collagen Peptides",
+    short: "Types I and III, unflavoured",
     kind: "Food supplement",
     size: "250 g, 25 servings",
-    image: "/img/collagen-jar.webp",
-    imageAlt: "UMMA Halal Collagen Protein jar, unflavoured, 250 g",
+    image: media.packBovine,
+    imageAlt: "UMMA Collagen, bovine peptides, 250 g tub",
+    tone: "#0e3b2e",
     gallery: [
-      { image: "/img/collagen-jar.webp", alt: "UMMA Halal Collagen Protein jar, unflavoured, 250 g" },
+      { image: media.packBovine, alt: "UMMA Collagen, bovine peptides, 250 g tub" },
       {
         image: media.scoopJar,
-        alt: "A level scoop of collagen powder lifted from the open jar",
-        title: "One level scoop is 10 g",
-        points: ["25 servings in every jar", "Scoop included"],
+        alt: "A level scoop of collagen lifted from the open tub",
+        title: "One level scoop, 10 g",
+        points: ["25 servings in every tub", "Scoop inside"],
       },
       {
-        image: media.skin,
-        alt: "A woman in a cream hijab with her eyes closed, hand resting on her cheek",
-        title: "What collagen peptides are studied for",
-        points: ["Skin hydration and elasticity", "Nail growth", "Joint comfort in active adults"],
+        image: media.heroPoster,
+        alt: "The UMMA collagen tub on a stone plinth beside a cup of chai",
+        title: "Nothing else in the tub",
+        points: ["Hydrolysed bovine collagen peptides", "No flavour, no added sugar", "No additives"],
       },
       {
         image: media.chai,
         alt: "A scoop of collagen powder held over a cup of chai",
-        title: "Stir it into what you already drink",
-        points: ["Chai or coffee", "Warm water", "Smoothies and yogurt"],
+        title: "Disappears into your chai",
+        points: ["Dissolves in hot or cold drinks", "No taste of its own"],
       },
       {
-        image: media.powder,
-        alt: "Fine off-white collagen powder in a ceramic bowl with a scoop",
-        title: "Nothing else in the jar",
-        points: ["100% bovine collagen peptides", "No flavour", "No added sugar", "No additives"],
+        image: media.skin,
+        alt: "A woman in a hijab with her eyes closed, hand resting on her cheek",
+        title: "What collagen peptides are studied for",
+        points: ["Skin hydration and elasticity", "Nail growth", "Joint comfort in active adults"],
       },
-      { image: media.womanJar, alt: "A woman in a cream hijab stirring chai, with the UMMA jar on the counter" },
+      { image: media.womanJar, alt: "A woman in a hijab stirring chai with the UMMA tub on the counter" },
     ],
     packs: [
-      { id: "collagen-1", label: "One jar", note: "25 days", price: 1800 },
-      { id: "collagen-2", label: "Two jars", note: "50 days", price: 3240, compareAt: 3600 },
+      { id: "collagen-1", label: "One tub", note: "25 days, ₹72 a day", price: 1800 },
+      { id: "collagen-2", label: "Two tubs", note: "50 days, ₹65 a day", price: 3240, compareAt: 3600 },
     ],
     pricePlaceholder: true,
     intro:
-      "Collagen is a protein found in skin, hair, nails and joints. UMMA is hydrolysed bovine collagen with nothing added, so it stirs into what you already drink.",
+      "Collagen is the protein that holds skin, joints, hair and nails together. This is hydrolysed bovine collagen with nothing added, so one scoop disappears into the chai you already drink.",
     facts: [
-      { term: "Source", detail: "100% bovine" },
+      { term: "Source", detail: "Bovine" },
       { term: "Collagen", detail: "Types I and III, hydrolysed" },
-      { term: "Taste", detail: "Unflavoured, no sugar added, no additives" },
+      { term: "Per scoop", detail: "10 g collagen peptides" },
+      { term: "Taste", detail: "None. No added sugar, no additives" },
       { term: "Pack", detail: "250 g, 25 servings" },
     ],
     ingredients: "Hydrolysed bovine collagen peptides (100%).",
-    howTo: [
-      "Measure 10 g, which is one level scoop.",
-      "Add it to 250 ml of warm water, coffee, a smoothie or yogurt.",
-      "Stir well and drink. Once a day is enough.",
-    ],
+    howTo: collagenHowTo,
   },
   {
-    slug: "halal-gelatin",
-    name: "Halal Gelatin",
-    short: "Pure bovine gelatin, unflavoured",
+    slug: "marine-collagen",
+    name: "Marine Collagen Peptides",
+    short: "Type I, unflavoured",
     kind: "Food supplement",
-    size: "100 g, 10 servings",
-    image: "/img/gelatin.webp",
-    imageAlt: "UMMA Halal Gelatin pouch, unflavoured, 100 g",
+    size: "250 g, 25 servings",
+    image: media.packMarine,
+    imageAlt: "UMMA Collagen, marine peptides, 250 g pouch",
+    tone: "#123f3e",
     gallery: [
-      { image: "/img/gelatin.webp", alt: "UMMA Halal Gelatin pouch, unflavoured, 100 g" },
+      { image: media.packMarine, alt: "UMMA Collagen, marine peptides, 250 g pouch" },
+      {
+        image: media.powder,
+        alt: "Fine collagen powder in a ceramic bowl with a scoop",
+        title: "Collagen from fish",
+        points: ["Mainly type I collagen", "Hydrolysed into peptides", "Unflavoured"],
+      },
+      {
+        image: media.chai,
+        alt: "A scoop of collagen powder held over a cup of chai",
+        title: "One scoop a day",
+        points: ["10 g in your chai, coffee or water"],
+      },
+    ],
+    packs: [],
+    pricePlaceholder: true,
+    intro:
+      "Collagen peptides from fish, mainly type I. A choice for anyone who prefers marine collagen to bovine. Unflavoured, so it disappears into your drink.",
+    facts: [
+      { term: "Source", detail: "Fish" },
+      { term: "Collagen", detail: "Type I, hydrolysed" },
+      { term: "Per scoop", detail: "10 g collagen peptides" },
+      { term: "Pack", detail: "250 g, 25 servings" },
+    ],
+    ingredients: "Hydrolysed marine collagen peptides (type I, from fish).",
+    howTo: collagenHowTo,
+  },
+  {
+    slug: "perimenopause-blend",
+    name: "Perimenopause Daily Blend",
+    short: "Daily nutrition blend, café mocha",
+    kind: "Food supplement",
+    size: "400 g, 20 servings",
+    image: media.packPeri,
+    imageAlt: "UMMA Perimenopause daily nutrition blend, café mocha, 400 g tub",
+    tone: "#5e1f2b",
+    gallery: [
+      { image: media.packPeri, alt: "UMMA Perimenopause daily nutrition blend, café mocha, 400 g tub" },
+      {
+        image: media.nails,
+        alt: "A woman's hands around a warm cup",
+        title: "A warm cup, once a day",
+        points: ["Café mocha flavour", "20 servings"],
+      },
+    ],
+    packs: [],
+    pricePlaceholder: true,
+    intro:
+      "A café mocha daily nutrition blend made for women in their forties, the years when the body starts to change. The full formula and ingredient list will be published here before launch.",
+    facts: [
+      { term: "Flavour", detail: "Café mocha" },
+      { term: "Pack", detail: "400 g, 20 servings" },
+    ],
+    ingredients: "To be published with the final formula.",
+    howTo: ["Serving directions will be published with the final formula."],
+  },
+  {
+    slug: "gelatin",
+    name: "Gelatin",
+    short: "Bovine, unflavoured",
+    kind: "Food",
+    size: "100 g",
+    image: media.packGelatin,
+    imageAlt: "UMMA Gelatin, bovine, unflavoured, 100 g pouch",
+    tone: "#ede4d0",
+    gallery: [
+      { image: media.packGelatin, alt: "UMMA Gelatin, bovine, unflavoured, 100 g pouch" },
       {
         image: media.gelatinDessert,
         alt: "Two glass cups of set fruit jelly with pomegranate seeds",
@@ -105,30 +177,35 @@ export const products: Product[] = [
         image: media.gelatinBloom,
         alt: "Gelatin powder blooming in a glass bowl of water",
         title: "One ingredient",
-        points: ["100% bovine gelatin", "Unflavoured"],
+        points: ["Bovine gelatin", "Unflavoured"],
       },
     ],
     packs: [],
     pricePlaceholder: true,
     intro: "Unflavoured bovine gelatin for desserts, jellies and home cooking.",
     facts: [
-      { term: "Source", detail: "100% bovine" },
+      { term: "Source", detail: "Bovine" },
       { term: "Taste", detail: "Unflavoured" },
-      { term: "Pack", detail: "100 g, 10 servings" },
+      { term: "Pack", detail: "100 g" },
     ],
     ingredients: "Bovine gelatin.",
-    howTo: ["Usage directions will be added once the pack text is final."],
+    howTo: [
+      "Sprinkle the gelatin over a little cold water and leave it to swell for 5 minutes.",
+      "Warm gently and stir until it dissolves. Do not boil.",
+      "Stir into your warm mixture, pour into moulds and chill until set.",
+    ],
   },
   {
-    slug: "henna-powder",
-    name: "Henna Powder",
-    short: "Finely milled henna leaf",
+    slug: "henna",
+    name: "Henna Leaf Powder",
+    short: "For hair, finely milled",
     kind: "Personal care",
     size: "250 g",
-    image: "/img/henna.webp",
-    imageAlt: "UMMA Premium Henna Powder pouch, 250 g",
+    image: media.packHenna,
+    imageAlt: "UMMA Henna leaf powder, 250 g pouch",
+    tone: "#474d27",
     gallery: [
-      { image: "/img/henna.webp", alt: "UMMA Premium Henna Powder pouch, 250 g", fit: "contain" },
+      { image: media.packHenna, alt: "UMMA Henna leaf powder, 250 g pouch" },
       {
         image: media.hennaPaste,
         alt: "A wooden bowl of smooth henna paste beside henna powder and leaves",
@@ -149,9 +226,9 @@ export const products: Product[] = [
       { term: "Made from", detail: "Henna leaf (Lawsonia inermis)" },
       { term: "Pack", detail: "250 g" },
     ],
-    ingredients: "Pure henna (Lawsonia inermis) leaf powder.",
+    ingredients: "Henna (Lawsonia inermis) leaf powder.",
     howTo: [
-      "Mix with warm water to make a smooth paste.",
+      "Mix with warm water to a smooth paste.",
       "Apply evenly on clean, dry hair.",
       "Leave for 1 to 3 hours, then rinse thoroughly.",
     ],
@@ -159,13 +236,14 @@ export const products: Product[] = [
   {
     slug: "multani-mitti",
     name: "Multani Mitti",
-    short: "Fuller's earth for face and neck",
+    short: "Fuller's earth face pack",
     kind: "Personal care",
     size: "250 g",
-    image: "/img/multani-mitti.webp",
-    imageAlt: "UMMA Premium Multani Mitti pouch, 250 g",
+    image: media.packMultani,
+    imageAlt: "UMMA Multani mitti, fuller's earth, 250 g pouch",
+    tone: "#86614a",
     gallery: [
-      { image: "/img/multani-mitti.webp", alt: "UMMA Premium Multani Mitti pouch, 250 g", fit: "contain" },
+      { image: media.packMultani, alt: "UMMA Multani mitti, fuller's earth, 250 g pouch" },
       {
         image: media.multaniPaste,
         alt: "A bowl of clay paste with a brush, rose petals and rose water",
@@ -180,7 +258,7 @@ export const products: Product[] = [
       { term: "Made from", detail: "Multani mitti (fuller's earth)" },
       { term: "Pack", detail: "250 g" },
     ],
-    ingredients: "Natural multani mitti (fuller's earth).",
+    ingredients: "Multani mitti (fuller's earth).",
     howTo: [
       "Mix 1 to 2 tablespoons with rose water or plain water to a smooth paste.",
       "Apply evenly on face and neck.",
@@ -189,7 +267,7 @@ export const products: Product[] = [
   },
 ];
 
-/* Shown only in the footer. */
+/* Shown in the footer, and linked from the buy box. */
 export const certificate = {
   placeholder: true,
   issuer: "",
@@ -201,95 +279,102 @@ export const certificate = {
 export const home = {
   announcement: {
     placeholder: true,
-    text: "Launch offer: two jars of collagen for ₹3,240. You save ₹360.",
-    href: "/products/halal-collagen",
+    text: "Launch offer: two tubs of collagen for ₹3,240",
+    href: "/products/collagen",
   },
   hero: {
-    heading: "Collagen for every day.",
-    body: "Unflavoured bovine collagen peptides, types I and III. One scoop stirs into your chai, coffee or water.",
-    primary: { label: "Shop collagen", href: "/products/halal-collagen" },
-    secondary: { label: "Read the collagen guide", href: "/collagen-guide" },
+    heading: "Looked after, quietly.",
+    body: "Pure collagen peptides for the years when your body starts asking for a little more. One unflavoured scoop in your morning chai.",
+    primary: { label: "Shop collagen", href: "/products/collagen" },
+    note: "From ₹72 a day",
     poster: media.heroPoster,
     video: media.heroVideo,
-    alt: "The UMMA collagen jar on a stone plinth against a green wall, with leaf shadows moving across it",
+    alt: "The UMMA collagen tub on a stone plinth beside a cup of chai, leaf shadows moving on the wall",
   },
-  benefits: {
-    heading: "Where collagen sits in the body",
-    body: "Collagen is the most common protein in the body. These are the places people take it for.",
-    items: [
+  facts: [
+    { value: "10 g", label: "collagen in every scoop" },
+    { value: "1", label: "ingredient, nothing added" },
+    { value: "0 g", label: "added sugar" },
+    { value: "Halal", label: "certified source" },
+  ],
+  story: {
+    stat: "30%",
+    statement: "In the five years after menopause, skin can lose as much as 30% of its collagen.",
+    source: "Calleja-Agius, Muscat-Baron and Brincat, Menopause International, 2007",
+    intro:
+      "Collagen is the most abundant protein in the body. The body makes less of it every year from the mid-twenties, and the drop speeds up as oestrogen falls in the forties and fifties.",
+    points: [
       {
         title: "Skin",
-        body: "Collagen is the main protein in the skin's deeper layer. Skin hydration and elasticity are the most studied outcomes of collagen peptides.",
+        body: "Collagen gives the deeper layer of skin its structure. As it falls, skin becomes thinner and loses some of its spring.",
         image: media.skin,
-        alt: "A woman in a cream hijab with her eyes closed, hand resting on her cheek",
-      },
-      {
-        title: "Hair",
-        body: "Hair grows from the skin, which is rich in collagen. Research on collagen and hair is still early, so we make no promises here.",
-        image: media.hair,
-        alt: "A wooden comb and a folded silk scarf on linen",
-      },
-      {
-        title: "Nails",
-        body: "A small study of women with brittle nails saw faster nail growth and fewer broken nails after 24 weeks of collagen peptides.",
-        image: media.nails,
-        alt: "A woman's hands around a cup of chai",
+        alt: "A woman in a hijab with her eyes closed, hand resting on her cheek",
       },
       {
         title: "Joints",
-        body: "Cartilage and tendons are largely collagen. A 24-week trial in active adults found less joint discomfort during activity.",
+        body: "Cartilage, tendons and ligaments are built largely from collagen. They take the load of every stair and every errand.",
         image: media.joints,
         alt: "A woman in a hijab walking briskly through a park",
       },
+      {
+        title: "Hair and nails",
+        body: "Both grow from collagen-rich skin. Nails are often the first place women notice a change.",
+        image: media.nails,
+        alt: "A woman's hands around a cup of chai",
+      },
     ],
+    bridge:
+      "Your body builds collagen from the protein you eat. Collagen peptides give it those building blocks in a form that dissolves in a cup of chai.",
   },
   research: {
-    heading: "What the research says",
-    body: "Published studies on collagen peptides, summarised plainly. They tested collagen peptides in general, not UMMA's product, and results differ from person to person.",
+    heading: "What the studies found",
+    body: "Published trials of collagen peptides, summarised plainly. They studied collagen peptides in general, not UMMA's product, and results differ from person to person.",
     studies: [
       {
-        stat: "26 trials",
-        label: "1,721 participants",
+        stat: "26",
+        label: "randomised trials, 1,721 people",
         detail:
-          "A 2023 review pooled 26 randomised controlled trials and found that hydrolysed collagen improved skin hydration and elasticity compared with placebo.",
+          "A 2023 review pooled the trials and found collagen peptides improved skin hydration and elasticity compared with a placebo.",
         source: "Pu et al., Nutrients, 2023",
-        url: "https://pubmed.ncbi.nlm.nih.gov/37432180/",
       },
       {
         stat: "8 weeks",
         label: "69 women aged 35 to 55",
         detail:
-          "In a double-blind trial, women taking 2.5 g or 5 g of collagen peptides daily had better skin elasticity than the placebo group.",
+          "In a double-blind trial, women taking 2.5 g or 5 g of collagen peptides a day had better skin elasticity than the placebo group.",
         source: "Proksch et al., Skin Pharmacology and Physiology, 2014",
-        url: "https://pubmed.ncbi.nlm.nih.gov/23949208/",
       },
       {
-        stat: "12% faster",
-        label: "nail growth over 24 weeks",
+        stat: "12%",
+        label: "faster nail growth in 24 weeks",
         detail:
-          "25 participants took 2.5 g of collagen peptides daily. Nails grew 12% faster and broke 42% less often. This study had no placebo group.",
+          "25 women took 2.5 g of collagen peptides a day. Nails grew 12% faster and broke 42% less often. The study had no placebo group.",
         source: "Hexsel et al., Journal of Cosmetic Dermatology, 2017",
-        url: "https://pubmed.ncbi.nlm.nih.gov/28786550/",
       },
       {
-        stat: "24 weeks",
-        label: "147 athletes, 10 g a day",
+        stat: "10 g",
+        label: "a day for 24 weeks, 147 athletes",
         detail:
-          "Athletes without joint disease who took collagen hydrolysate reported less activity-related joint discomfort than those on placebo.",
+          "Active adults without joint disease who took collagen hydrolysate reported less joint discomfort during activity than those on placebo.",
         source: "Clark et al., Current Medical Research and Opinion, 2008",
-        url: "https://pubmed.ncbi.nlm.nih.gov/18416885/",
       },
     ],
-    note: "This product is a food supplement. It is not intended to diagnose, treat, cure or prevent any disease.",
+    note: "UMMA collagen is a food supplement. It is not intended to diagnose, treat, cure or prevent any disease.",
   },
   ritual: {
     heading: "One scoop, once a day.",
     body: "It has no taste, so it goes into whatever is already in your cup.",
     films: [
-      { shot: "Close on hands: a level scoop lifted from the jar.", video: media.ritual1 },
+      { shot: "A level scoop lifted from the tub.", video: media.ritual1, poster: media.scoopJar },
       { shot: "The scoop tipped into a cup of warm chai.", video: media.ritual2 },
       { shot: "She stirs, lifts the cup and smiles.", video: media.ritual3 },
     ],
+  },
+  spotlight: {
+    slug: "perimenopause-blend",
+    heading: "For the perimenopause years",
+    body: "A café mocha daily blend made for women in their forties, when the body starts to change. One warm cup a day.",
+    cta: "See the blend",
   },
   banner: {
     heading: "Made for the women who look after everyone else.",
@@ -299,30 +384,35 @@ export const home = {
   },
   valuePack: {
     placeholder: true,
-    heading: "Two jars, fifty days.",
-    body: "Collagen is a daily habit, so most people order two. The pair costs ₹3,240 instead of ₹3,600.",
-    cta: { label: "Add two jars to cart", productSlug: "halal-collagen", packId: "collagen-2" },
+    heading: "Two tubs, fifty days.",
+    body: "Collagen works as a daily habit, so most people order two. The pair is ₹3,240 instead of ₹3,600, which brings it to ₹65 a day.",
+    cta: { label: "Add two tubs to cart", productSlug: "collagen", packId: "collagen-2" },
+    image: media.range,
   },
   faq: [
     {
-      q: "What is in the jar?",
-      a: "Hydrolysed bovine collagen peptides, types I and III. No flavour, no added sugar and no additives.",
+      q: "What is in the tub?",
+      a: "Hydrolysed bovine collagen peptides, types I and III, and nothing else. No flavour, no added sugar and no additives.",
     },
     {
       q: "How do I take it?",
-      a: "Stir 10 g (one scoop) into 250 ml of warm water, coffee, a smoothie or yogurt, once a day.",
+      a: "Stir 10 g (one level scoop) into 250 ml of warm chai, coffee, water, a smoothie or yogurt, once a day.",
     },
     {
       q: "How long before I notice anything?",
       a: "The published studies ran for 8 to 24 weeks of daily use, so think in months, not days. Results differ from person to person.",
     },
     {
+      q: "Bovine or marine?",
+      a: "Both are hydrolysed collagen peptides. Bovine provides types I and III; marine is mainly type I and suits anyone who prefers fish to beef. Choose the one that suits your diet.",
+    },
+    {
       q: "Is it halal?",
-      a: "Yes. UMMA collagen comes from a halal bovine source. Certificate details are listed at the bottom of every page.",
+      a: "Yes. The certificate details, including the certifying body and certificate number, are listed at the bottom of every page.",
     },
     {
       q: "Who should ask a doctor first?",
-      a: "If you are pregnant, breastfeeding, taking medication or have a medical condition, please speak to a healthcare professional before use.",
+      a: "If you are pregnant, breastfeeding, taking medication or have a medical condition, speak to a healthcare professional before use.",
     },
     {
       q: "Do you deliver across India, and is cash on delivery available?",
@@ -340,7 +430,7 @@ export const reviews: { items: Review[] } = { items: [] };
 
 export const guide = {
   heading: "The collagen guide",
-  intro: "The basics, without the jargon: what collagen is, which kind is in the jar and how to take it.",
+  intro: "The basics, without the jargon: what collagen is, which kind is in the tub and how to take it.",
   sections: [
     {
       id: "what-is-collagen",
@@ -349,7 +439,7 @@ export const guide = {
       alt: "Fine off-white collagen powder in a ceramic bowl",
       body: [
         "Collagen is a structural protein. It makes up roughly a quarter to a third of all the protein in the body and is found in skin, bones, tendons and cartilage.",
-        "The body builds its own collagen from the protein you eat, and it makes less of it as the years go by. That is why many adults choose to add collagen to their diet.",
+        "The body builds its own collagen from the protein you eat, and makes less of it as the years go by. For women, the fall speeds up around menopause.",
       ],
     },
     {
@@ -364,22 +454,22 @@ export const guide = {
     },
     {
       id: "types",
-      title: "Types I and III",
+      title: "Types I and III, bovine or marine",
       image: media.skin,
-      alt: "A woman in a cream hijab with her eyes closed",
+      alt: "A woman in a hijab with her eyes closed",
       body: [
         "There are many types of collagen. Type I is the most common and is found in skin, bone and tendons. Type III sits alongside it in skin and blood vessels.",
-        "Bovine collagen, the kind in UMMA, provides types I and III. Marine collagen is mostly type I.",
+        "Bovine collagen provides types I and III. Marine collagen is mainly type I. Both are hydrolysed peptides; choose the one that suits your diet.",
       ],
     },
     {
       id: "how-to-take",
       title: "How much and how long",
       image: media.scoopJar,
-      alt: "A level scoop of collagen powder lifted from the open jar",
+      alt: "A level scoop of collagen lifted from the open tub",
       body: [
         "One 10 g scoop a day is the serving on the pack. Published studies have used between 2.5 g and 10 g a day.",
-        "Those studies ran for 8 to 24 weeks, so consistency matters more than timing. Take it at whatever point in the day you will remember, with or without food.",
+        "Those studies ran for 8 to 24 weeks, so consistency matters more than timing. Take it whenever you will remember, with or without food.",
       ],
     },
     {
@@ -388,7 +478,7 @@ export const guide = {
       image: media.nails,
       alt: "A woman's hands around a cup of chai",
       body: [
-        "Collagen is a food protein and has been well tolerated in published trials. If you are pregnant, breastfeeding, taking medication or have a medical condition, speak to a healthcare professional before you start.",
+        "Collagen is a food protein and was well tolerated in the published trials. If you are pregnant, breastfeeding, taking medication or have a medical condition, speak to a healthcare professional before you start.",
         "A food supplement does not replace a varied, balanced diet and a healthy lifestyle.",
       ],
     },
@@ -409,9 +499,9 @@ export const company = {
 
 export const nav = [
   { label: "Shop", href: "/shop" },
-  { label: "Collagen", href: "/products/halal-collagen" },
+  { label: "Collagen", href: "/products/collagen" },
+  { label: "Perimenopause", href: "/products/perimenopause-blend" },
   { label: "Collagen guide", href: "/collagen-guide" },
-  { label: "Reviews", href: "/#reviews" },
 ];
 
 export const inr = (n: number) => "₹" + n.toLocaleString("en-IN");

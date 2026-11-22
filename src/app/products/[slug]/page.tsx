@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PackPicker } from "@/components/AddToCart";
 import { Faq } from "@/components/Faq";
 import { Gallery } from "@/components/Gallery";
+import { Star } from "@/components/Ornament";
+import { ProductCard } from "@/components/ProductCard";
 import { Research } from "@/components/Research";
 import { Reviews } from "@/components/Reviews";
 import { Ritual } from "@/components/Ritual";
@@ -24,42 +27,45 @@ export default async function ProductPage({ params }: Params) {
   const product = await getProduct((await params).slug);
   if (!product) notFound();
 
-  const [home, company, reviews] = await Promise.all([getHome(), getCompany(), getReviews()]);
-  const isCollagen = product.slug === "halal-collagen";
+  const [home, company, reviews, all] = await Promise.all([getHome(), getCompany(), getReviews(), getProducts()]);
+  const isCollagen = product.slug === "collagen" || product.slug === "marine-collagen";
   const isSupplement = product.kind === "Food supplement";
+  const isFood = product.kind !== "Personal care";
   const howToImage = product.gallery[1] ?? product.gallery[0];
+  const others = all.filter((p) => p.slug !== product.slug).slice(0, 3);
 
   return (
     <>
-      {/* Hero: gallery and buy box */}
-      <section className="bg-cream">
-        <div className="wrap grid gap-10 py-10 md:grid-cols-2 md:gap-14 md:py-16">
+      {/* Gallery and buy box */}
+      <section>
+        <div className="wrap grid gap-10 pb-16 pt-8 md:grid-cols-2 md:gap-16 md:pb-24 md:pt-14">
           <Gallery slides={product.gallery} />
 
-          <div className="md:py-6">
-            <p className="text-muted">
+          <div className="md:sticky md:top-28 md:self-start md:py-4">
+            <p className="text-[14px] text-brass-ink">
               {product.kind}, {product.size}
             </p>
-            <h1 className="mt-2 text-[40px] md:text-[56px]">{product.name}</h1>
-            <p className="mt-5 max-w-[50ch] text-lg text-muted">{product.intro}</p>
+            <h1 className="mt-3 text-[48px] md:text-[68px]">{product.name}</h1>
+            <p className="mt-6 max-w-[48ch] text-lg text-muted">{product.intro}</p>
 
-            <div className="mt-8">
+            <div className="mt-9">
               <PackPicker
                 name={product.name}
                 image={product.image}
                 packs={product.packs}
                 placeholder={product.pricePlaceholder}
+                halal={isFood}
               />
             </div>
 
             <dl className="mt-10">
               {product.facts.map((f) => (
-                <div key={f.term} className="flex justify-between gap-6 border-t border-green/15 py-3.5">
+                <div key={f.term} className="flex justify-between gap-6 border-t border-brass/40 py-3.5">
                   <dt className="text-muted">{f.term}</dt>
                   <dd className="text-right">{f.detail}</dd>
                 </div>
               ))}
-              <div className="flex justify-between gap-6 border-y border-green/15 py-3.5">
+              <div className="flex justify-between gap-6 border-y border-brass/40 py-3.5">
                 <dt className="text-muted">Ingredients</dt>
                 <dd className="text-right">{product.ingredients}</dd>
               </div>
@@ -68,23 +74,26 @@ export default async function ProductPage({ params }: Params) {
         </div>
       </section>
 
-      {/* Benefits (collagen) */}
+      {/* Why collagen (collagen products) */}
       {isCollagen && (
-        <section className="wrap py-20 md:py-28">
-          <div className="mb-12 max-w-[560px]">
-            <h2 className="text-[36px] md:text-[48px]">{home.benefits.heading}</h2>
-            <p className="mt-4 text-lg text-muted">{home.benefits.body}</p>
-          </div>
-          <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {home.benefits.items.map((b) => (
-              <article key={b.title}>
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-card)] bg-stone">
-                  <Image src={b.image} alt={b.alt} fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover" />
-                </div>
-                <h3 className="mt-5 text-[28px]">{b.title}</h3>
-                <p className="mt-2 text-muted">{b.body}</p>
-              </article>
-            ))}
+        <section className="bg-cream">
+          <div className="wrap py-20 md:py-28">
+            <div className="mx-auto max-w-[860px] text-center">
+              <p className="display text-[110px] text-brass md:text-[170px]">{home.story.stat}</p>
+              <h2 className="-mt-2 text-[32px] md:-mt-5 md:text-[46px]">{home.story.statement}</h2>
+              <p className="mt-5 text-[13px] italic text-muted">{home.story.source}</p>
+            </div>
+            <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
+              {home.story.points.map((p) => (
+                <article key={p.title}>
+                  <div className="arch relative aspect-[4/5] bg-stone">
+                    <Image src={p.image} alt={p.alt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
+                  </div>
+                  <h3 className="mt-6 text-[32px]">{p.title}</h3>
+                  <p className="mt-2 text-muted">{p.body}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
       )}
@@ -93,29 +102,21 @@ export default async function ProductPage({ params }: Params) {
 
       {/* How to use */}
       <section className="wrap py-20 md:py-28">
-        <h2 className="mb-12 text-[36px] md:text-[48px]">How to use it</h2>
+        <h2 className="mb-14 text-[48px] md:text-[68px]">How to use it</h2>
         {isCollagen ? (
-          <Ritual steps={product.howTo} films={home.ritual.films} />
+          <Ritual steps={product.howTo} films={product.slug === "collagen" ? home.ritual.films : []} />
         ) : (
-          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-14">
+          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
             <ol className="space-y-6">
               {product.howTo.map((s, i) => (
-                <li key={s} className="flex gap-4">
-                  {product.howTo.length > 1 && (
-                    <span className="text-[40px] font-light leading-none text-gold">{i + 1}</span>
-                  )}
-                  <p className="pt-1.5 text-lg leading-snug">{s}</p>
+                <li key={s} className="flex gap-5 border-t border-brass/40 pt-5">
+                  {product.howTo.length > 1 && <span className="display text-[44px] text-brass">{i + 1}</span>}
+                  <p className="pt-2 text-lg leading-snug">{s}</p>
                 </li>
               ))}
             </ol>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-panel)] bg-stone">
-              <Image
-                src={howToImage.image}
-                alt={howToImage.alt}
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover"
-              />
+            <div className="arch relative aspect-[4/5] bg-stone">
+              <Image src={howToImage.image} alt={howToImage.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
             </div>
           </div>
         )}
@@ -125,7 +126,7 @@ export default async function ProductPage({ params }: Params) {
       {isSupplement && (
         <section className="bg-cream">
           <div className="wrap grid gap-10 py-20 md:grid-cols-12 md:py-28">
-            <h2 className="text-[36px] md:col-span-4 md:text-[48px]">On the label</h2>
+            <h2 className="text-[48px] md:col-span-4 md:text-[60px]">On the label</h2>
             <div className="space-y-4 text-lg md:col-span-8">
               {company.statements.map((s) => (
                 <p key={s}>{s}</p>
@@ -145,17 +146,34 @@ export default async function ProductPage({ params }: Params) {
 
       <Reviews items={reviews.items} />
 
-      {/* Questions */}
       {isCollagen && (
         <section className="bg-cream">
           <div className="wrap grid gap-10 py-20 md:grid-cols-12 md:py-28">
-            <h2 className="text-[36px] md:col-span-4 md:text-[48px]">Questions about collagen</h2>
+            <h2 className="text-[48px] md:col-span-4 md:text-[60px]">Questions, answered</h2>
             <div className="md:col-span-8">
               <Faq items={home.faq} />
             </div>
           </div>
         </section>
       )}
+
+      {/* More from the range */}
+      <section className="wrap py-20 md:py-28">
+        <div className="text-center">
+          <Star className="mx-auto mb-6 text-brass" size={24} />
+          <h2 className="text-[44px] md:text-[60px]">Also in the range</h2>
+        </div>
+        <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 md:gap-x-10">
+          {others.map((p) => (
+            <ProductCard key={p.slug} product={p} />
+          ))}
+        </div>
+        <div className="mt-12 text-center">
+          <Link href="/shop" className="link text-green">
+            See the whole range
+          </Link>
+        </div>
+      </section>
     </>
   );
 }

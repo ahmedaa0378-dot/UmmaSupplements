@@ -13,46 +13,53 @@ type Props = {
 export function Header({ nav, announcement }: Props) {
   const { count, setOpen } = useCart();
   const [menu, setMenu] = useState(false);
+  const link = "hover:underline hover:decoration-brass hover:underline-offset-[6px]";
 
   return (
     <>
-      <Link href={announcement.href} className="block bg-green px-4 py-2.5 text-center text-sm text-cream">
+      <Link
+        href={announcement.href}
+        className="block bg-green-deep px-4 py-2.5 text-center text-[13px] tracking-[0.04em] text-ivory"
+      >
         {announcement.text}
       </Link>
-      <header className="sticky top-0 z-40 border-b border-stone bg-paper/95 backdrop-blur">
-        <div className="wrap flex h-[68px] items-center justify-between">
-          <Link href="/" aria-label="UMMA Supplements, home" className="shrink-0">
-            <Image src="/img/logo-green.png" alt="UMMA Supplements" width={1023} height={354} priority className="h-11 w-auto" />
-          </Link>
-
-          <nav aria-label="Main" className="hidden gap-9 md:flex">
+      <header className="sticky top-0 z-40 border-b border-brass/30 bg-ivory/95 backdrop-blur">
+        <div className="wrap grid h-[72px] grid-cols-[1fr_auto_1fr] items-center">
+          <nav aria-label="Main" className="hidden gap-8 text-[15px] md:flex">
             {nav.map((n) => (
-              <Link key={n.href} href={n.href} className="hover:underline hover:underline-offset-4">
+              <Link key={n.href} href={n.href} className={link}>
                 {n.label}
               </Link>
             ))}
           </nav>
+          <button
+            className="justify-self-start text-[15px] md:hidden"
+            aria-expanded={menu}
+            aria-controls="mobile-nav"
+            onClick={() => setMenu((v) => !v)}
+          >
+            {menu ? "Close" : "Menu"}
+          </button>
 
-          <div className="flex items-center gap-2">
-            <button onClick={() => setOpen(true)} className="rounded-full border border-green px-4 py-2 text-sm text-green">
+          <Link href="/" aria-label="UMMA Supplements, home" className="justify-self-center">
+            <Image src="/img/umma-logo.svg" alt="UMMA Supplements" width={206} height={71} priority className="h-10 w-auto md:h-11" />
+          </Link>
+
+          <div className="flex items-center gap-6 justify-self-end text-[15px]">
+            <Link href="/#reviews" className={`hidden md:inline ${link}`}>
+              Reviews
+            </Link>
+            <button onClick={() => setOpen(true)} className={link}>
               Cart{count > 0 ? ` (${count})` : ""}
-            </button>
-            <button
-              className="rounded-full px-3 py-2 text-sm md:hidden"
-              aria-expanded={menu}
-              aria-controls="mobile-nav"
-              onClick={() => setMenu((v) => !v)}
-            >
-              {menu ? "Close" : "Menu"}
             </button>
           </div>
         </div>
 
         {menu && (
-          <nav id="mobile-nav" aria-label="Main" className="border-t border-stone md:hidden">
+          <nav id="mobile-nav" aria-label="Main" className="border-t border-brass/30 md:hidden">
             <div className="wrap flex flex-col py-2">
-              {nav.map((n) => (
-                <Link key={n.href} href={n.href} className="py-3 text-lg" onClick={() => setMenu(false)}>
+              {[...nav, { label: "Reviews", href: "/#reviews" }].map((n) => (
+                <Link key={n.href} href={n.href} className="display py-3 text-[28px]" onClick={() => setMenu(false)}>
                   {n.label}
                 </Link>
               ))}

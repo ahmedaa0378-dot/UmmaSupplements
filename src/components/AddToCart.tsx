@@ -9,10 +9,11 @@ type Props = {
   image: string;
   packs: Pack[];
   placeholder?: boolean;
+  halal?: boolean;
 };
 
 /* Pack picker plus add-to-cart for a product page. */
-export function PackPicker({ name, image, packs, placeholder }: Props) {
+export function PackPicker({ name, image, packs, placeholder, halal }: Props) {
   const { add } = useCart();
   const [picked, setPicked] = useState(packs[0]?.id);
   const pack = packs.find((p) => p.id === picked);
@@ -20,7 +21,7 @@ export function PackPicker({ name, image, packs, placeholder }: Props) {
   if (!pack) {
     return (
       <div>
-        <p className="text-2xl">Price to be announced</p>
+        <p className="display text-[32px]">Price at launch</p>
         <button className="btn btn-primary mt-5 w-full sm:w-auto" disabled>
           Available at launch
         </button>
@@ -38,8 +39,8 @@ export function PackPicker({ name, image, packs, placeholder }: Props) {
             return (
               <label
                 key={p.id}
-                className={`cursor-pointer rounded-[var(--radius-card)] border-[1.5px] p-4 ${
-                  on ? "border-green bg-cream" : "border-stone"
+                className={`cursor-pointer rounded-[var(--radius-card)] border p-4 ${
+                  on ? "border-green bg-paper" : "border-brass/40"
                 }`}
               >
                 <input
@@ -69,7 +70,15 @@ export function PackPicker({ name, image, packs, placeholder }: Props) {
       >
         Add to cart, {inr(pack.price)}
       </button>
-      {placeholder && <p className="mt-3 text-sm text-muted">Prices shown are provisional until launch.</p>}
+      {halal && (
+        <p className="mt-4 text-center text-[14px] text-muted">
+          Certified halal.{" "}
+          <a href="#halal" className="link">
+            See certificate details
+          </a>
+        </p>
+      )}
+      {placeholder && <p className="mt-1 text-center text-[13px] text-muted">Prices shown are provisional until launch.</p>}
     </div>
   );
 }

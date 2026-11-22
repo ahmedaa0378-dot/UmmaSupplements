@@ -1,4 +1,6 @@
-type Study = { stat: string; label: string; detail: string; source: string; url: string };
+import { Star } from "./Ornament";
+
+type Study = { stat: string; label: string; detail: string; source: string };
 
 export function Research({
   heading,
@@ -12,32 +14,26 @@ export function Research({
   note: string;
 }) {
   return (
-    <section className="bg-green text-cream">
+    <section className="bg-green text-ivory">
       <div className="wrap py-20 md:py-28">
-        <div className="max-w-[640px]">
-          <h2 className="text-[36px] md:text-[48px]">{heading}</h2>
-          <p className="mt-5 text-lg text-cream/80">{body}</p>
+        <div className="mx-auto max-w-[640px] text-center">
+          <Star className="mx-auto mb-6 text-brass" size={24} />
+          <h2 className="text-[44px] md:text-[60px]">{heading}</h2>
+          <p className="mt-5 text-lg text-ivory/75">{body}</p>
         </div>
 
-        <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-px overflow-hidden bg-brass/30 sm:grid-cols-2 lg:grid-cols-4">
           {studies.map((s) => (
-            <article key={s.url} className="border-t border-cream/25 pt-6">
-              <p className="text-[44px] font-light leading-none tracking-tight text-gold-soft">{s.stat}</p>
-              <p className="mt-2 text-cream/70">{s.label}</p>
-              <p className="mt-5 leading-relaxed">{s.detail}</p>
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link mt-4 inline-block text-sm text-cream/70 hover:text-cream"
-              >
-                {s.source}
-              </a>
+            <article key={s.source} className="bg-green p-7 md:p-8">
+              <p className="display text-[64px] text-brass-soft">{s.stat}</p>
+              <p className="mt-2 text-[15px] text-ivory/70">{s.label}</p>
+              <p className="mt-6 leading-relaxed">{s.detail}</p>
+              <p className="mt-6 text-[13px] italic text-ivory/55">{s.source}</p>
             </article>
           ))}
         </div>
 
-        <p className="mt-14 max-w-[70ch] text-sm text-cream/60">{note}</p>
+        <p className="mx-auto mt-12 max-w-[70ch] text-center text-[13px] text-ivory/55">{note}</p>
       </div>
     </section>
   );

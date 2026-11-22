@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/hanken-grotesk";
+import "@fontsource/cormorant-garamond/500.css";
+import "@fontsource/cormorant-garamond/500-italic.css";
 import "./globals.css";
 import { CartProvider } from "@/components/cart";
 import { ChatLauncher } from "@/components/ChatLauncher";
@@ -10,9 +12,9 @@ import { getCompany, getHome, getNav } from "@/lib/content";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ummasupplements.com"),
-  title: { default: "UMMA Supplements | Halal collagen you can verify", template: "%s | UMMA Supplements" },
+  title: { default: "UMMA Supplements | Collagen for every day", template: "%s | UMMA Supplements" },
   description:
-    "Unflavoured halal bovine collagen peptides from UMMA Supplements, with the halal certificate published in full.",
+    "Pure, unflavoured collagen peptides for women in their forties and beyond. One scoop in your morning chai.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
