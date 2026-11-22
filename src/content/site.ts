@@ -299,7 +299,7 @@ export const home = {
   ],
   story: {
     stat: "30%",
-    statement: "In the five years after menopause, skin can lose as much as 30% of its collagen.",
+    statement: "of skin collagen can be lost in the first five years after menopause.",
     source: "Calleja-Agius, Muscat-Baron and Brincat, Menopause International, 2007",
     intro:
       "Collagen is the most abundant protein in the body. The body makes less of it every year from the mid-twenties, and the drop speeds up as oestrogen falls in the forties and fifties.",

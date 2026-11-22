@@ -79,8 +79,11 @@ export default async function ProductPage({ params }: Params) {
         <section className="bg-cream">
           <div className="wrap py-20 md:py-28">
             <div className="mx-auto max-w-[860px] text-center">
-              <p className="display text-[110px] text-brass md:text-[170px]">{home.story.stat}</p>
-              <h2 className="-mt-2 text-[32px] md:-mt-5 md:text-[46px]">{home.story.statement}</h2>
+              <p className="display text-[110px] leading-none text-brass md:text-[170px]" aria-hidden="true">{home.story.stat}</p>
+              <h2 className="mt-2 text-[32px] md:mt-0 md:text-[46px]">
+                <span className="sr-only">{home.story.stat} </span>
+                {home.story.statement}
+              </h2>
               <p className="mt-5 text-[13px] italic text-muted">{home.story.source}</p>
             </div>
             <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">

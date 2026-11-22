@@ -44,8 +44,11 @@ export default async function HomePage() {
       {/* Her story: what changes after forty */}
       <section className="wrap py-20 md:py-32">
         <div className="mx-auto max-w-[920px] text-center">
-          <p className="display text-[120px] text-brass md:text-[200px]">{home.story.stat}</p>
-          <h2 className="-mt-2 text-[34px] md:-mt-6 md:text-[52px]">{home.story.statement}</h2>
+          <p className="display text-[120px] leading-none text-brass md:text-[200px]" aria-hidden="true">{home.story.stat}</p>
+          <h2 className="mt-2 text-[34px] md:mt-0 md:text-[52px]">
+            <span className="sr-only">{home.story.stat} </span>
+            {home.story.statement}
+          </h2>
           <p className="mt-5 text-[13px] italic text-muted">{home.story.source}</p>
           <p className="mx-auto mt-10 max-w-[60ch] text-lg text-muted">{home.story.intro}</p>
         </div>
