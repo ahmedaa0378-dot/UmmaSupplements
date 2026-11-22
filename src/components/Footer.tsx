@@ -24,7 +24,7 @@ export async function Footer() {
         <div className="mt-14 grid gap-12 md:grid-cols-4">
           <div>
             <h2 className="text-[24px]">Shop</h2>
-            <ul className="mt-4 space-y-2 text-ivory/80">
+            <ul className="mt-4 space-y-2 text-on-dark-soft">
               {products.map((p) => (
                 <li key={p.slug}>
                   <Link href={`/products/${p.slug}`} className={link}>
@@ -37,7 +37,7 @@ export async function Footer() {
 
           <div>
             <h2 className="text-[24px]">Learn</h2>
-            <ul className="mt-4 space-y-2 text-ivory/80">
+            <ul className="mt-4 space-y-2 text-on-dark-soft">
               <li>
                 <Link href="/collagen-guide" className={link}>
                   The collagen guide
@@ -53,7 +53,7 @@ export async function Footer() {
 
           <div>
             <h2 className="text-[24px]">Customer care</h2>
-            <ul className="mt-4 space-y-2 text-ivory/80">
+            <ul className="mt-4 space-y-2 text-on-dark-soft">
               <li>
                 <a href={`tel:${company.phone.replace(/\s/g, "")}`} className={link}>
                   {company.phone}
@@ -77,8 +77,8 @@ export async function Footer() {
             <dl className="mt-4 text-sm">
               {certRows.map((r) => (
                 <div key={r.term} className="flex justify-between gap-4 border-t border-ivory/15 py-2.5">
-                  <dt className="text-ivory/60">{r.term}</dt>
-                  <dd className="text-right text-ivory/85">{r.detail}</dd>
+                  <dt className="text-on-dark-faint">{r.term}</dt>
+                  <dd className="text-right text-on-dark">{r.detail}</dd>
                 </div>
               ))}
             </dl>
@@ -90,7 +90,7 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 grid gap-6 border-t border-ivory/15 pt-8 text-[13px] text-ivory/60 md:grid-cols-2">
+        <div className="mt-14 grid gap-6 border-t border-ivory/15 pt-8 text-[13px] text-on-dark-faint md:grid-cols-2">
           <div className="space-y-1">
             {company.statements.map((s) => (
               <p key={s}>{s}</p>

@@ -1,41 +1,49 @@
+import Image from "next/image";
 import Link from "next/link";
 import { LoopVideo } from "./LoopVideo";
-import { Star } from "./Ornament";
+
+type Media = { video: string; poster: string };
 
 type Props = {
   heading: string;
   body: string;
   primary: { label: string; href: string };
   note: string;
-  video: string;
-  poster: string;
+  wide: Media;
+  tall: Media;
   alt: string;
 };
 
 /*
-  Split hero. The film sits inside the arch from the label, with a brass line tracing it.
-  The arch is the one bold move on the page; everything around it stays quiet.
+  Full-bleed hero. A quiet still life fills the whole section; the left of the frame (top on
+  phones) is empty wall, so the type sits directly on the image without a box or overlay.
+  The poster image loads first, then the film takes over with only the light moving.
 */
-export function Hero({ heading, body, primary, note, video, poster, alt }: Props) {
+export function Hero({ heading, body, primary, note, wide, tall, alt }: Props) {
   return (
-    <section className="overflow-hidden">
-      <div className="wrap grid items-center gap-10 pb-14 pt-8 md:grid-cols-12 md:gap-6 md:pb-20 md:pt-14">
-        <div className="order-2 md:order-1 md:col-span-6 md:pr-8">
-          <Star className="mb-6 text-brass" size={26} />
-          <h1 className="text-[56px] md:text-[96px]">{heading}</h1>
-          <p className="mt-6 max-w-[40ch] text-lg text-muted md:text-xl">{body}</p>
+    <section className="relative isolate overflow-hidden bg-stone">
+      <div className="absolute inset-0 -z-10 md:hidden">
+        <Image src={tall.poster} alt="" fill priority sizes="100vw" className="object-cover object-bottom" />
+        <div className="absolute inset-0 [&_video]:object-bottom">
+          <LoopVideo src={tall.video} poster={tall.poster} label={alt} />
+        </div>
+      </div>
+      <div className="absolute inset-0 -z-10 hidden md:block">
+        <Image src={wide.poster} alt="" fill priority sizes="100vw" className="object-cover object-right" />
+        <div className="absolute inset-0 [&_video]:object-right">
+          <LoopVideo src={wide.video} poster={wide.poster} label={alt} />
+        </div>
+      </div>
+
+      <div className="wrap flex min-h-[calc(100svh-110px)] flex-col pb-10 pt-14 md:min-h-[min(780px,calc(100svh-110px))] md:justify-center md:py-24">
+        <div className="max-w-[600px]">
+          <h1 className="text-[60px] text-green md:text-[104px]">{heading}</h1>
+          <p className="mt-6 max-w-[36ch] text-lg text-ink md:text-xl">{body}</p>
           <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
             <Link href={primary.href} className="btn btn-primary">
               {primary.label}
             </Link>
-            <span className="text-[15px] text-brass-ink">{note}</span>
-          </div>
-        </div>
-
-        <div className="relative order-1 mx-auto w-full max-w-[520px] md:order-2 md:col-span-6 md:max-w-none md:pl-6">
-          <div className="arch-line absolute inset-x-0 -top-3 bottom-0 md:left-6 md:-top-4" aria-hidden="true" />
-          <div className="arch relative mx-3 aspect-[4/5] bg-stone md:mx-4">
-            <LoopVideo src={video} poster={poster} eager label={alt} />
+            <span className="text-[15px] font-medium text-green">{note}</span>
           </div>
         </div>
       </div>

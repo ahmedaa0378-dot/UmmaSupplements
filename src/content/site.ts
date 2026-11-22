@@ -38,15 +38,15 @@ const collagenHowTo = [
 export const products: Product[] = [
   {
     slug: "collagen",
-    name: "Bovine Collagen Peptides",
-    short: "Types I and III, unflavoured",
+    name: "Halal Collagen Protein",
+    short: "Bovine peptides, types I and III, unflavoured",
     kind: "Food supplement",
     size: "250 g, 25 servings",
     image: media.packBovine,
-    imageAlt: "UMMA Collagen, bovine peptides, 250 g tub",
+    imageAlt: "UMMA Halal Collagen Protein, unflavoured, 250 g tub",
     tone: "#0e3b2e",
     gallery: [
-      { image: media.packBovine, alt: "UMMA Collagen, bovine peptides, 250 g tub" },
+      { image: media.packBovine, alt: "UMMA Halal Collagen Protein, unflavoured, 250 g tub" },
       {
         image: media.scoopJar,
         alt: "A level scoop of collagen lifted from the open tub",
@@ -54,8 +54,8 @@ export const products: Product[] = [
         points: ["25 servings in every tub", "Scoop inside"],
       },
       {
-        image: media.heroPoster,
-        alt: "The UMMA collagen tub on a stone plinth beside a cup of chai",
+        image: media.powder,
+        alt: "Fine collagen powder in a ceramic bowl with a scoop",
         title: "Nothing else in the tub",
         points: ["Hydrolysed bovine collagen peptides", "No flavour, no added sugar", "No additives"],
       },
@@ -97,19 +97,19 @@ export const products: Product[] = [
     kind: "Food supplement",
     size: "250 g, 25 servings",
     image: media.packMarine,
-    imageAlt: "UMMA Collagen, marine peptides, 250 g pouch",
+    imageAlt: "UMMA Marine Collagen Peptides, unflavoured, 250 g pouch",
     tone: "#123f3e",
     gallery: [
-      { image: media.packMarine, alt: "UMMA Collagen, marine peptides, 250 g pouch" },
+      { image: media.packMarine, alt: "UMMA Marine Collagen Peptides, unflavoured, 250 g pouch" },
       {
-        image: media.powder,
-        alt: "Fine collagen powder in a ceramic bowl with a scoop",
+        image: media.chai,
+        alt: "A scoop of collagen powder held over a cup of chai",
         title: "Collagen from fish",
         points: ["Mainly type I collagen", "Hydrolysed into peptides", "Unflavoured"],
       },
       {
-        image: media.chai,
-        alt: "A scoop of collagen powder held over a cup of chai",
+        image: media.powder,
+        alt: "Fine collagen powder in a ceramic bowl with a scoop",
         title: "One scoop a day",
         points: ["10 g in your chai, coffee or water"],
       },
@@ -129,15 +129,15 @@ export const products: Product[] = [
   },
   {
     slug: "perimenopause-blend",
-    name: "Perimenopause Daily Blend",
+    name: "Perimenopause Daily Nutrition Blend",
     short: "Daily nutrition blend, café mocha",
     kind: "Food supplement",
     size: "400 g, 20 servings",
     image: media.packPeri,
-    imageAlt: "UMMA Perimenopause daily nutrition blend, café mocha, 400 g tub",
+    imageAlt: "UMMA Perimenopause Daily Nutrition Blend, café mocha, 400 g tub",
     tone: "#5e1f2b",
     gallery: [
-      { image: media.packPeri, alt: "UMMA Perimenopause daily nutrition blend, café mocha, 400 g tub" },
+      { image: media.packPeri, alt: "UMMA Perimenopause Daily Nutrition Blend, café mocha, 400 g tub" },
       {
         image: media.nails,
         alt: "A woman's hands around a warm cup",
@@ -158,15 +158,15 @@ export const products: Product[] = [
   },
   {
     slug: "gelatin",
-    name: "Gelatin",
-    short: "Bovine, unflavoured",
-    kind: "Food",
-    size: "100 g",
+    name: "Halal Gelatin",
+    short: "Pure bovine gelatin, unflavoured",
+    kind: "Food supplement",
+    size: "100 g, 10 servings",
     image: media.packGelatin,
-    imageAlt: "UMMA Gelatin, bovine, unflavoured, 100 g pouch",
+    imageAlt: "UMMA Halal Gelatin, unflavoured, 100 g pouch",
     tone: "#ede4d0",
     gallery: [
-      { image: media.packGelatin, alt: "UMMA Gelatin, bovine, unflavoured, 100 g pouch" },
+      { image: media.packGelatin, alt: "UMMA Halal Gelatin, unflavoured, 100 g pouch" },
       {
         image: media.gelatinDessert,
         alt: "Two glass cups of set fruit jelly with pomegranate seeds",
@@ -182,11 +182,11 @@ export const products: Product[] = [
     ],
     packs: [],
     pricePlaceholder: true,
-    intro: "Unflavoured bovine gelatin for desserts, jellies and home cooking.",
+    intro: "Pure, unflavoured bovine gelatin. Use it in jellies, puddings and home cooking.",
     facts: [
       { term: "Source", detail: "Bovine" },
       { term: "Taste", detail: "Unflavoured" },
-      { term: "Pack", detail: "100 g" },
+      { term: "Pack", detail: "100 g, 10 servings" },
     ],
     ingredients: "Bovine gelatin.",
     howTo: [
@@ -197,15 +197,15 @@ export const products: Product[] = [
   },
   {
     slug: "henna",
-    name: "Henna Leaf Powder",
+    name: "Premium Henna Powder",
     short: "For hair, finely milled",
     kind: "Personal care",
     size: "250 g",
     image: media.packHenna,
-    imageAlt: "UMMA Henna leaf powder, 250 g pouch",
+    imageAlt: "UMMA Premium Henna Powder, 250 g pouch",
     tone: "#474d27",
     gallery: [
-      { image: media.packHenna, alt: "UMMA Henna leaf powder, 250 g pouch" },
+      { image: media.packHenna, alt: "UMMA Premium Henna Powder, 250 g pouch" },
       {
         image: media.hennaPaste,
         alt: "A wooden bowl of smooth henna paste beside henna powder and leaves",
@@ -240,10 +240,10 @@ export const products: Product[] = [
     kind: "Personal care",
     size: "250 g",
     image: media.packMultani,
-    imageAlt: "UMMA Multani mitti, fuller's earth, 250 g pouch",
+    imageAlt: "UMMA Premium Multani Mitti, fuller's earth, 250 g pouch",
     tone: "#86614a",
     gallery: [
-      { image: media.packMultani, alt: "UMMA Multani mitti, fuller's earth, 250 g pouch" },
+      { image: media.packMultani, alt: "UMMA Premium Multani Mitti, fuller's earth, 250 g pouch" },
       {
         image: media.multaniPaste,
         alt: "A bowl of clay paste with a brush, rose petals and rose water",
@@ -287,9 +287,9 @@ export const home = {
     body: "Pure collagen peptides for the years when your body starts asking for a little more. One unflavoured scoop in your morning chai.",
     primary: { label: "Shop collagen", href: "/products/collagen" },
     note: "From ₹72 a day",
-    poster: media.heroPoster,
-    video: media.heroVideo,
-    alt: "The UMMA collagen tub on a stone plinth beside a cup of chai, leaf shadows moving on the wall",
+    wide: { video: media.heroWideVideo, poster: media.heroWidePoster },
+    tall: { video: media.heroTallVideo, poster: media.heroTallPoster },
+    alt: "The UMMA collagen tub on a stone counter beside a cup of chai and a bowl of dates, with arched window light on the wall",
   },
   facts: [
     { value: "10 g", label: "collagen in every scoop" },

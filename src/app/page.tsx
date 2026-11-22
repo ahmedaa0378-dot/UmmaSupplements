@@ -115,7 +115,7 @@ export default async function HomePage() {
             <div>
               <Star className="mb-6 text-brass-soft" size={24} />
               <h2 className="text-[48px] md:text-[68px]">{home.spotlight.heading}</h2>
-              <p className="mt-6 max-w-[42ch] text-lg text-ivory/80">{home.spotlight.body}</p>
+              <p className="mt-6 max-w-[42ch] text-lg text-on-dark-soft">{home.spotlight.body}</p>
               <Link href={`/products/${spotlight.slug}`} className="btn btn-outline-light mt-9">
                 {home.spotlight.cta}
               </Link>
@@ -130,7 +130,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-green-deep/85 via-green-deep/25 to-transparent" />
         <div className="wrap flex min-h-[560px] flex-col justify-end py-14 md:min-h-[700px] md:py-20">
           <h2 className="max-w-[16ch] text-[44px] md:text-[76px]">{home.banner.heading}</h2>
-          <p className="mt-4 text-lg text-ivory/85">{home.banner.body}</p>
+          <p className="mt-4 text-lg text-on-dark">{home.banner.body}</p>
         </div>
       </section>
 
