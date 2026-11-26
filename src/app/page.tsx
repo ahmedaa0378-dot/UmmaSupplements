@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AddPackButton } from "@/components/AddToCart";
+import { Checks } from "@/components/Checks";
 import { Faq } from "@/components/Faq";
 import { Hero } from "@/components/Hero";
 import { Divider, Star } from "@/components/Ornament";
@@ -8,10 +9,16 @@ import { ProductCard } from "@/components/ProductCard";
 import { Research } from "@/components/Research";
 import { Reviews } from "@/components/Reviews";
 import { Ritual } from "@/components/Ritual";
-import { getGuide, getHome, getProducts, getReviews } from "@/lib/content";
+import { getChecks, getGuide, getHome, getProducts, getReviews } from "@/lib/content";
 
 export default async function HomePage() {
-  const [home, products, reviews, guide] = await Promise.all([getHome(), getProducts(), getReviews(), getGuide()]);
+  const [home, products, reviews, guide, checks] = await Promise.all([
+    getHome(),
+    getProducts(),
+    getReviews(),
+    getGuide(),
+    getChecks(),
+  ]);
   const collagen = products.find((p) => p.slug === "collagen")!;
   const spotlight = products.find((p) => p.slug === home.spotlight.slug);
   const valueProduct = products.find((p) => p.slug === home.valuePack.cta.productSlug);
@@ -77,6 +84,8 @@ export default async function HomePage() {
       </section>
 
       <Research {...home.research} />
+
+      <Checks {...checks} />
 
       {/* Daily ritual */}
       <section className="wrap py-20 md:py-28">

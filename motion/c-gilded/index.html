@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>UMMA hero — C · Gilded geometry</title>
+<style>
+  html, body { margin: 0; background: #0d3a2c; overflow: hidden; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+/*
+  Concept C, "Gilded geometry" — after the repo's Gilded Illumination style, adapted from
+  Gothic miniatures to Islamic illumination: a deep green granular ground, an eight-point
+  star lattice and a sun medallion (shamsa) laid in gold leaf, square by square, with ink
+  edges and white-lead dots. Geometry only: no calligraphy, no verses.
+  Gold lies dark and warm until a band of light crosses it; then its leaf squares flash
+  unevenly while the green stays matte. One band crosses per loop, entering and leaving
+  off-frame, so the last frame meets the first.
+*/
+import { mountMock } from "../shared/mock.js";
+
+const q = new URLSearchParams(location.search);
+const TALL = q.get("size") === "tall";
+const W = TALL ? 1080 : 1920, H = TALL ? 1920 : 1080;
+const cv = document.getElementById("c");
+cv.width = W; cv.height = H;
+const g = cv.getContext("2d");
+window.DUR = 10;
+const TAU = Math.PI * 2;
+let seed = 11;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const sstep = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const mk = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; return [c, c.getContext("2d")]; };
+
+// Medallion centre: behind the product.
+const MX = TALL ? W * 0.5 : W * 0.70, MY = TALL ? H * 0.70 : H * 0.55;
+const MR = TALL ? 430 : 470;
+
+// ---- ground: granular green pigment ----
+const [ground, gg] = mk();
+gg.fillStyle = "#0d3a2c"; gg.fillRect(0, 0, W, H);
+for (let i = 0; i < 90000; i++) {
+  const x = rnd() * W, y = rnd() * H, r = 0.6 + rnd() * 1.6;
+  const l = rnd();
+  gg.fillStyle = l < 0.5 ? `rgba(6,32,24,${0.25 + rnd() * 0.35})` : `rgba(40,92,72,${0.10 + rnd() * 0.22})`;
+  gg.fillRect(x, y, r, r);
+}
+{ // a little depth toward the edges
+  const v = gg.createRadialGradient(MX, MY, MR * 0.4, MX, MY, Math.max(W, H));
+  v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(3,18,13,0.55)");
+  gg.fillStyle = v; gg.fillRect(0, 0, W, H);
+}
+
+// ---- gold leaf texture: squares, seams, overlaps, red bole ----
+const LEAF = 22;
+function leafTexture(lit) {
+  const c = document.createElement("canvas"); c.width = 440; c.height = 440;
+  const x = c.getContext("2d");
+  for (let i = 0; i < 20; i++) for (let j = 0; j < 20; j++) {
+    const v = rnd();
+    // dark warm gold at rest; bright warm gold (capped, never white) when lit
+    const base = lit ? [216 + v * 26, 176 + v * 30, 92 + v * 30] : [128 + v * 30, 96 + v * 22, 44 + v * 14];
+    x.fillStyle = `rgb(${base.map(Math.round).join(",")})`;
+    x.fillRect(i * LEAF, j * LEAF, LEAF, LEAF);
+    // burnish streak
+    x.fillStyle = lit ? "rgba(255,240,200,0.18)" : "rgba(255,220,150,0.06)";
+    x.fillRect(i * LEAF + 2, j * LEAF + 3 + v * 10, LEAF - 4, 2);
+    if (v > 0.93) { x.fillStyle = "rgba(150,40,20,0.55)"; x.fillRect(i * LEAF + v * 14, j * LEAF + 6, 3, 2); }
+  }
+  x.strokeStyle = lit ? "rgba(120,80,20,0.55)" : "rgba(50,30,8,0.6)"; x.lineWidth = 1;
+  for (let i = 0; i <= 20; i++) { x.beginPath(); x.moveTo(i * LEAF + 0.5, 0); x.lineTo(i * LEAF + 0.5, 440); x.stroke(); x.beginPath(); x.moveTo(0, i * LEAF + 0.5); x.lineTo(440, i * LEAF + 0.5); x.stroke(); }
+  x.strokeStyle = lit ? "rgba(255,236,180,0.5)" : "rgba(200,160,90,0.25)";
+  for (let i = 0; i <= 20; i++) { x.beginPath(); x.moveTo(i * LEAF + 1.5, 0); x.lineTo(i * LEAF + 1.5, 440); x.stroke(); }
+  return c;
+}
+seed = 11; const texDark = leafTexture(false);
+seed = 11; const texLit = leafTexture(true);   // same squares, so lit and dark line up
+
+// ---- geometry ----
+// Eight-point star: two overlapping squares (khatam), as a closed star polygon path.
+function starPath(p, cx, cy, r) {
+  const pts = [];
+  for (let k = 0; k < 16; k++) {
+    const a = (k * TAU) / 16 - TAU / 32;
+    const rr = k % 2 === 0 ? r : r * 0.7654; // regular {8/2} star
+    pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]);
+  }
+  p.moveTo(pts[0][0], pts[0][1]); for (const [x, y] of pts.slice(1)) p.lineTo(x, y); p.closePath();
+}
+// Sixteen-point rosette for the medallion.
+function rosette(p, cx, cy, r, n, inner) {
+  for (let k = 0; k <= n * 2; k++) {
+    const a = (k * TAU) / (n * 2) - TAU / 4;
+    const rr = k % 2 === 0 ? r : r * inner;
+    const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+    k ? p.lineTo(x, y) : p.moveTo(x, y);
+  }
+  p.closePath();
+}
+
+// Paths that carry gold. Each entry: a Path2D and a band width.
+const S = TALL ? 150 : 160; // lattice spacing
+const gold = [];
+const lattice = new Path2D();
+for (let gx = -1; gx <= Math.ceil(W / S) + 1; gx++) for (let gy = -1; gy <= Math.ceil(H / S) + 1; gy++) {
+  const cx = gx * S, cy = gy * S;
+  starPath(lattice, cx, cy, S * 0.40);
+  // connecting cross arms between stars
+  lattice.moveTo(cx + S * 0.40, cy); lattice.lineTo(cx + S * 0.60, cy);
+  lattice.moveTo(cx, cy + S * 0.40); lattice.lineTo(cx, cy + S * 0.60);
+}
+gold.push({ path: lattice, w: 5, ink: 3, mask: "lattice" });
+const ring1 = new Path2D(); ring1.arc(MX, MY, MR, 0, TAU);
+const ring2 = new Path2D(); ring2.arc(MX, MY, MR - 26, 0, TAU);
+const ros = new Path2D(); rosette(ros, MX, MY, MR - 40, 16, 0.86);
+const ros2 = new Path2D(); rosette(ros2, MX, MY, MR * 0.62, 8, 0.72);
+gold.push({ path: ring1, w: 9, ink: 3, mask: "medal" }, { path: ring2, w: 4, ink: 2, mask: "medal" },
+  { path: ros, w: 5, ink: 2.5, mask: "medal" }, { path: ros2, w: 6, ink: 2.5, mask: "medal" });
+
+// Where the lattice is allowed: faded out over the headline, cut away inside the medallion.
+function latticeMask(x) {
+  const [c, m] = mk();
+  if (TALL) {
+    const gr = m.createLinearGradient(0, H * 0.36, 0, H * 0.52);
+    gr.addColorStop(0, "rgba(0,0,0,0.05)"); gr.addColorStop(1, "rgba(0,0,0,0.85)");
+    m.fillStyle = gr; m.fillRect(0, 0, W, H);
+  } else {
+    const gr = m.createLinearGradient(W * 0.40, 0, W * 0.62, 0);
+    gr.addColorStop(0, "rgba(0,0,0,0.05)"); gr.addColorStop(1, "rgba(0,0,0,0.85)");
+    m.fillStyle = gr; m.fillRect(0, 0, W, H);
+  }
+  m.globalCompositeOperation = "destination-out";
+  m.beginPath(); m.arc(MX, MY, MR + 18, 0, TAU); m.fill();
+  return c;
+}
+const LMASK = latticeMask();
+
+// Medallion field: a slightly lighter green disc so the gold has a quiet ground.
+function drawMedalGround(c) {
+  c.save();
+  c.beginPath(); c.arc(MX, MY, MR - 26, 0, TAU); c.clip();
+  c.fillStyle = "rgba(24,78,58,0.55)"; c.fillRect(MX - MR, MY - MR, MR * 2, MR * 2);
+  c.restore();
+}
+
+// Build a gold layer (dark or lit) once: ink edge, leaf through a pattern, white-lead dots.
+function goldLayer(tex) {
+  const [c, x] = mk();
+  const pat = x.createPattern(tex, "repeat");
+  for (const part of ["lattice", "medal"]) {
+    const [pc, px] = mk();
+    for (const gd of gold.filter((g2) => g2.mask === part)) {
+      px.lineJoin = "round"; px.lineCap = "round";
+      px.strokeStyle = "#1a0f06"; px.lineWidth = gd.w + gd.ink * 2; px.stroke(gd.path);
+      px.strokeStyle = pat; px.lineWidth = gd.w; px.stroke(gd.path);
+    }
+    if (part === "lattice") { px.globalCompositeOperation = "destination-in"; px.drawImage(LMASK, 0, 0); }
+    x.drawImage(pc, 0, 0);
+  }
+  return c;
+}
+const goldDark = goldLayer(texDark);
+const goldLit = goldLayer(texLit);
+
+// Per-square sparkle: each leaf square catches the light at its own moment.
+const sparkle = (() => {
+  const [c, x] = mk();
+  for (let i = 0; i < W; i += LEAF) for (let j = 0; j < H; j += LEAF) {
+    x.fillStyle = `rgba(0,0,0,${(0.35 + rnd() * 0.65).toFixed(2)})`;
+    x.fillRect(i, j, LEAF, LEAF);
+  }
+  return c;
+})();
+
+// White-lead pearls around the medallion.
+const pearls = (() => {
+  const [c, x] = mk();
+  const n = 96;
+  for (let k = 0; k < n; k++) {
+    const a = (k * TAU) / n;
+    x.fillStyle = "rgba(240,232,212,0.85)";
+    x.beginPath(); x.arc(MX + Math.cos(a) * (MR + 14), MY + Math.sin(a) * (MR + 14), 2.4, 0, TAU); x.fill();
+  }
+  return c;
+})();
+
+const [litBuf, lb] = mk();
+window.render = (t) => {
+  g.drawImage(ground, 0, 0);
+  drawMedalGround(g);
+  g.drawImage(pearls, 0, 0);
+  g.drawImage(goldDark, 0, 0);
+
+  // a diagonal band of light crossing left to right, off-frame at both ends of the loop
+  const u = t / window.DUR;
+  const span = W + H * 0.6 + 1200;
+  const pos = -600 + u * span;
+  lb.globalCompositeOperation = "source-over";
+  lb.clearRect(0, 0, W, H);
+  lb.drawImage(goldLit, 0, 0);
+  lb.globalCompositeOperation = "destination-in";
+  const gr = lb.createLinearGradient(pos - 420, -H * 0.3, pos + 420, H * 0.3);
+  gr.addColorStop(0, "rgba(0,0,0,0)");
+  gr.addColorStop(0.42, "rgba(0,0,0,0.75)");
+  gr.addColorStop(0.5, "rgba(0,0,0,1)");
+  gr.addColorStop(0.58, "rgba(0,0,0,0.75)");
+  gr.addColorStop(1, "rgba(0,0,0,0)");
+  lb.save(); lb.translate(0, 0); lb.fillStyle = gr; lb.fillRect(0, 0, W, H); lb.restore();
+  lb.drawImage(sparkle, 0, 0);
+  g.drawImage(litBuf, 0, 0);
+
+  // small star glints where the band is brightest on the medallion ring
+  for (let k = 0; k < 24; k++) {
+    const a = (k * TAU) / 24 + 0.13;
+    const x = MX + Math.cos(a) * MR, y = MY + Math.sin(a) * MR;
+    const d = Math.abs((x + y * 0.6) - (pos + H * 0.18));
+    const s = Math.max(0, 1 - d / 160);
+    if (s <= 0.05) continue;
+    const L = 6 + 18 * s;
+    g.strokeStyle = `rgba(255,236,190,${(0.75 * s).toFixed(3)})`; g.lineWidth = 1.4;
+    g.beginPath(); g.moveTo(x - L, y); g.lineTo(x + L, y); g.moveTo(x, y - L); g.lineTo(x, y + L); g.stroke();
+  }
+};
+
+mountMock({ dark: true }).then(() => { window.render(0); window.READY = true; });
+</script>
+</body>
+</html>

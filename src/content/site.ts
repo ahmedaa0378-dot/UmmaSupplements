@@ -8,8 +8,19 @@ import { media } from "./media";
 
 export type Pack = { id: string; label: string; note?: string; price: number; compareAt?: number };
 
-/* A gallery slide is a photo, optionally with a short title and points laid over it. */
-export type Slide = { image: string; alt: string; title?: string; points?: string[]; fit?: "contain" };
+/*
+  A gallery slide is a photo, optionally with a short title and points laid over it.
+  A panel slide is a designed card instead: title and points on paper, with the pack beside them.
+*/
+export type Slide = {
+  image: string;
+  alt: string;
+  title?: string;
+  points?: string[];
+  fit?: "contain";
+  panel?: boolean;
+  link?: { href: string; label: string };
+};
 
 export type Product = {
   slug: string;
@@ -54,16 +65,31 @@ export const products: Product[] = [
         points: ["25 servings in every tub", "Scoop inside"],
       },
       {
-        image: media.powder,
-        alt: "Fine collagen powder in a ceramic bowl with a scoop",
-        title: "Nothing else in the tub",
-        points: ["Hydrolysed bovine collagen peptides", "No flavour, no added sugar", "No additives"],
-      },
-      {
         image: media.chai,
         alt: "A scoop of collagen powder held over a cup of chai",
         title: "Disappears into your chai",
         points: ["Dissolves in hot or cold drinks", "No taste of its own"],
+      },
+      {
+        image: media.panelBovine,
+        alt: "UMMA Halal Collagen Protein tub",
+        panel: true,
+        title: "What's inside",
+        points: [
+          "Hydrolysed bovine collagen peptides, 100%",
+          "Types I and III",
+          "10 g in one level scoop",
+          "No flavour, no added sugar, no additives",
+          "250 g, 25 servings",
+        ],
+      },
+      {
+        image: media.panelBovine,
+        alt: "UMMA Halal Collagen Protein tub",
+        panel: true,
+        title: "Certified halal",
+        points: ["Bovine collagen from a certified halal supply", "Issuer, certificate number and expiry published in full"],
+        link: { href: "#halal", label: "See certificate details" },
       },
       {
         image: media.skin,
@@ -112,6 +138,13 @@ export const products: Product[] = [
         alt: "Fine collagen powder in a ceramic bowl with a scoop",
         title: "One scoop a day",
         points: ["10 g in your chai, coffee or water"],
+      },
+      {
+        image: media.panelMarine,
+        alt: "UMMA Marine Collagen Peptides pouch",
+        panel: true,
+        title: "What's inside",
+        points: ["Hydrolysed marine collagen peptides, 100%", "Mainly type I, from fish", "10 g in one level scoop", "Unflavoured", "250 g, 25 servings"],
       },
     ],
     packs: [],
@@ -287,9 +320,10 @@ export const home = {
     body: "Pure collagen peptides for the years when your body starts asking for a little more. One unflavoured scoop in your morning chai.",
     primary: { label: "Shop collagen", href: "/products/collagen" },
     note: "From ₹72 a day",
-    wide: { video: media.heroWideVideo, poster: media.heroWidePoster },
-    tall: { video: media.heroTallVideo, poster: media.heroTallPoster },
-    alt: "The UMMA collagen tub on a stone counter beside a cup of chai and a bowl of dates, with arched window light on the wall",
+    wide: { video: media.heroFibresWide, poster: media.heroFibresWidePoster },
+    tall: { video: media.heroFibresTall, poster: media.heroFibresTallPoster },
+    product: { image: media.heroTub, alt: "UMMA Halal Collagen Protein, unflavoured, 250 g tub" },
+    alt: "Fine green and gold fibres drift across ivory paper and twist into a slowly turning triple helix behind the tub",
   },
   facts: [
     { value: "10 g", label: "collagen in every scoop" },
@@ -505,3 +539,83 @@ export const nav = [
 ];
 
 export const inr = (n: number) => "₹" + n.toLocaleString("en-IN");
+
+/* "What to check on any collagen": a buying guide that answers each check for UMMA. */
+export const checks = {
+  heading: "What to check on any collagen",
+  intro: "Four things worth reading on the label before you buy, and how our collagen answers each.",
+  rows: [
+    {
+      check: "Source and type",
+      why: "Collagen comes from cattle, fish or pigs, and each gives different collagen types.",
+      umma: "Bovine, types I and III. Certified halal.",
+      link: { href: "#halal", label: "See certificate details" },
+    },
+    {
+      check: "Dose per serving",
+      why: "Published trials have used between 2.5 g and 10 g of collagen peptides a day.",
+      umma: "10 g in one level scoop.",
+    },
+    {
+      check: "What else is in the tub",
+      why: "Flavours, sweeteners and additives are ingredients you may not want every day.",
+      umma: "One ingredient. No flavour, no added sugar, no additives.",
+    },
+    {
+      check: "Form",
+      why: "Hydrolysed collagen is broken into short peptides, which dissolve in a drink.",
+      umma: "Hydrolysed peptides. Dissolves in hot or cold drinks.",
+    },
+  ],
+};
+
+/* How the body makes collagen, for the guide. Textbook biology, no product claims. */
+export const cycle = {
+  heading: "How your body makes collagen",
+  intro: "Collagen is not absorbed whole. Your body builds it, step by step, from the protein you eat.",
+  steps: [
+    {
+      title: "Protein becomes amino acids",
+      body: "Digestion breaks the protein in your food into amino acids. Collagen is rich in three of them: glycine, proline and hydroxyproline.",
+    },
+    {
+      title: "Cells link them into chains",
+      body: "Cells called fibroblasts join the amino acids into long chains. Vitamin C is needed for this step.",
+    },
+    {
+      title: "Three chains twist into one",
+      body: "Three chains wind around each other into a tight triple helix. This is the collagen molecule.",
+    },
+    {
+      title: "Molecules bundle into fibres",
+      body: "The molecules line up into fibres, which give skin, tendons and bone their structure.",
+    },
+  ],
+  note: {
+    title: "Pair it with vitamin C",
+    body: "Your body needs vitamin C to form collagen. Amla, guava, oranges and lemon are everyday sources.",
+  },
+};
+
+/* Myth and fact, for the guide. */
+export const myths = {
+  heading: "Myth and fact",
+  items: [
+    {
+      myth: "Collagen works overnight.",
+      fact: "Trials measured changes after eight weeks or more of daily use. Taking it every day matters more than the time of day.",
+    },
+    {
+      myth: "More collagen is better.",
+      fact: "Trials used 2.5 g to 10 g a day. One level scoop gives 10 g, so there is no need to take more.",
+    },
+    {
+      myth: "You can only get collagen from supplements.",
+      fact: "Your body makes its own from the protein you eat. Meat, fish, eggs, dal and paneer all provide the amino acids it uses.",
+    },
+    {
+      myth: "Collagen stops ageing.",
+      fact: "It doesn't. It is a protein, like the protein in your meals. Sleep, sun protection and a varied diet matter just as much.",
+    },
+  ],
+};

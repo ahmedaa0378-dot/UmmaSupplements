@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PackPicker } from "@/components/AddToCart";
+import { Checks } from "@/components/Checks";
 import { Faq } from "@/components/Faq";
 import { Gallery } from "@/components/Gallery";
 import { Star } from "@/components/Ornament";
@@ -10,7 +11,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Research } from "@/components/Research";
 import { Reviews } from "@/components/Reviews";
 import { Ritual } from "@/components/Ritual";
-import { getCompany, getHome, getProduct, getProducts, getReviews } from "@/lib/content";
+import { getChecks, getCompany, getHome, getProduct, getProducts, getReviews } from "@/lib/content";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -27,7 +28,13 @@ export default async function ProductPage({ params }: Params) {
   const product = await getProduct((await params).slug);
   if (!product) notFound();
 
-  const [home, company, reviews, all] = await Promise.all([getHome(), getCompany(), getReviews(), getProducts()]);
+  const [home, company, reviews, all, checks] = await Promise.all([
+    getHome(),
+    getCompany(),
+    getReviews(),
+    getProducts(),
+    getChecks(),
+  ]);
   const isCollagen = product.slug === "collagen" || product.slug === "marine-collagen";
   const isSupplement = product.kind === "Food supplement";
   const isFood = product.kind !== "Personal care";
@@ -102,6 +109,8 @@ export default async function ProductPage({ params }: Params) {
       )}
 
       {isCollagen && <Research {...home.research} />}
+
+      {product.slug === "collagen" && <Checks {...checks} />}
 
       {/* How to use */}
       <section className="wrap py-20 md:py-28">

@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>UMMA hero — A · Collagen fibres</title>
+<style>
+  html, body { margin: 0; background: #f4eee1; overflow: hidden; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+/*
+  Concept A, "Collagen fibres" — after the repo's Flow-field style, adapted:
+  warm paper, fine engraved green lines, short brass strokes running along them.
+  The lines are fibrils of a collagen-like triple helix: loose and faint on the left
+  (where the headline sits), gathering into a three-strand rope that slowly turns on the right.
+  Seamless loop: the helix turns exactly once and every stroke travels a whole number of
+  pattern lengths in DUR seconds, so frame DUR equals frame 0.
+*/
+import { mountMock } from "../shared/mock.js";
+
+const q = new URLSearchParams(location.search);
+const TALL = q.get("size") === "tall";
+const W = TALL ? 1080 : 1920, H = TALL ? 1920 : 1080;
+const cv = document.getElementById("c");
+cv.width = W; cv.height = H;
+const g = cv.getContext("2d");
+
+window.DUR = 12;
+const TAU = Math.PI * 2;
+
+// deterministic random
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const sstep = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// ---- paper (procedural, drawn once) ----
+const paper = document.createElement("canvas");
+paper.width = W; paper.height = H;
+{
+  const p = paper.getContext("2d");
+  p.fillStyle = "#f4eee1"; p.fillRect(0, 0, W, H);
+  // cloud mottling
+  for (let i = 0; i < 260; i++) {
+    const x = rnd() * W, y = rnd() * H, r = 60 + rnd() * 260;
+    const gr = p.createRadialGradient(x, y, 0, x, y, r);
+    const a = 0.006 + rnd() * 0.010;
+    gr.addColorStop(0, rnd() < 0.5 ? `rgba(196,170,120,${a})` : `rgba(255,252,244,${a * 1.4})`);
+    gr.addColorStop(1, "rgba(0,0,0,0)");
+    p.fillStyle = gr; p.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  // fibres and flecks
+  for (let i = 0; i < 2600; i++) {
+    const x = rnd() * W, y = rnd() * H, l = 3 + rnd() * 14, a = rnd() * TAU;
+    p.strokeStyle = `rgba(120,96,60,${0.03 + rnd() * 0.05})`; p.lineWidth = 0.6;
+    p.beginPath(); p.moveTo(x, y); p.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); p.stroke();
+  }
+  // soft vignette
+  const v = p.createRadialGradient(W * 0.55, H * 0.5, Math.min(W, H) * 0.35, W * 0.55, H * 0.5, Math.max(W, H) * 0.8);
+  v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(110,84,40,0.06)");
+  p.fillStyle = v; p.fillRect(0, 0, W, H);
+}
+
+// ---- the fibre field ----
+// Geometry is defined along a path: x runs left to right (wide) or the rope rises diagonally (tall).
+const CY = TALL ? H * 0.66 : H * 0.52;
+const R = TALL ? 52 : 64;                       // helix radius (strand centre from rope axis)
+const RS = TALL ? 22 : 28;                      // strand radius
+const K = TAU / (TALL ? 420 : 560);             // helix pitch
+const N = 210;
+const fibrils = [];
+for (let i = 0; i < N; i++) {
+  const j = i % 3;
+  fibrils.push({
+    j,
+    u: (rnd() * 2 - 1),
+    y0: lerp(H * 0.06, H * 0.94, rnd()),       // where it starts when loose
+    ph: rnd() * TAU,
+    amp: 10 + rnd() * 26,
+    loose: rnd() < 0.12 ? 0.55 + rnd() * 0.3 : 1, // a few fly-away fibrils never fully join
+    strokes: 1 + Math.floor(rnd() * 2),         // stroke heads per pattern length
+    off: rnd(),
+    cycles: 1 + Math.floor(rnd() * 2),          // pattern lengths travelled per loop
+  });
+}
+
+// along-rope coordinate s in [0, L]; returns screen point and depth for fibril f at time t.
+// Wide and tall share one geometry: the rope runs horizontally behind the product. On a phone the
+// loose fibrils stay in the lower part of the frame, below the headline.
+const L = W + 200;
+const G0 = TALL ? W * 0.0 : W * 0.16, G1 = TALL ? W * 0.42 : W * 0.6;
+function point(f, s, t) {
+  const b = sstep(G0, G1, s) * f.loose;   // 0 = loose, 1 = in the rope
+  const th = K * s - TAU * (t / window.DUR) + (TAU * f.j) / 3;
+  const across = R * Math.cos(th) + RS * f.u * (0.65 + 0.35 * Math.cos(th * 2 + f.ph));
+  const z = Math.sin(th);
+  const x = s - 100;
+  const y0 = TALL ? lerp(H * 0.50, H * 0.92, f.y0 / H) : f.y0;
+  const yLoose = y0 + f.amp * Math.sin(x / 340 + f.ph) + 14 * Math.sin(x / 130 + f.ph * 1.7);
+  const y = lerp(yLoose, CY + across, b);
+  return [x, y, z, b, x];
+}
+
+function ink(alpha) { return `rgba(14,59,46,${alpha.toFixed(3)})`; }
+
+window.render = (t) => {
+  g.drawImage(paper, 0, 0);
+  const STEP = 6;
+  // two passes: strands behind the rope axis, then in front
+  for (const pass of [0, 1]) {
+    for (const f of fibrils) {
+      let prev = null;
+      g.lineCap = "round";
+      for (let s = 0; s <= L; s += STEP) {
+        const [x, y, z, b, sx] = point(f, s, t);
+        const front = z >= 0 || b < 0.15;
+        if (prev && (front ? 1 : 0) === pass) {
+          // quiet in the text zone, fuller in the rope; back strands lighter and thinner
+          const zone = TALL ? 0.85 : (0.14 + 0.86 * sstep(W * 0.22, W * 0.58, sx));
+          const depth = 0.55 + 0.45 * (z + 1) / 2;
+          const a = (0.10 + 0.30 * b * depth) * zone;
+          g.strokeStyle = ink(a);
+          g.lineWidth = 0.7 + 0.9 * b * depth;
+          g.beginPath(); g.moveTo(prev[0], prev[1]); g.lineTo(x, y); g.stroke();
+        }
+        prev = [x, y];
+      }
+    }
+  }
+  // brass strokes: comet heads travelling along each fibril (front of the rope only)
+  const P = L / 2;
+  for (const f of fibrils) {
+    for (let k = 0; k < f.strokes; k++) {
+      const head = (((t / window.DUR) * f.cycles + f.off + k / f.strokes) % 1) * P;
+      for (const base of [0, P]) {
+        const sh = base + head;
+        if (sh > L) continue;
+        const len = 70 + 50 * f.loose;
+        let prev = null;
+        for (let d = 0; d <= len; d += 5) {
+          const s = sh - d;
+          if (s < 0) break;
+          const [x, y, z, b, sx] = point(f, s, t);
+          if (z < -0.1 && b > 0.3) { prev = null; continue; }
+          const zone = TALL ? sstep(0, W * 0.3, sx) : sstep(W * 0.25, W * 0.6, sx);
+          const fade = Math.pow(1 - d / len, 1.6);
+          if (prev) {
+            g.strokeStyle = `rgba(176,141,72,${(0.85 * fade * zone).toFixed(3)})`;
+            g.lineWidth = 1.2 + 1.6 * fade;
+            g.beginPath(); g.moveTo(prev[0], prev[1]); g.lineTo(x, y); g.stroke();
+          }
+          prev = [x, y];
+        }
+      }
+    }
+  }
+};
+
+mountMock({ dark: false }).then(() => { window.render(0); window.READY = true; });
+</script>
+</body>
+</html>

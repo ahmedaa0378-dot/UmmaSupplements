@@ -18,6 +18,16 @@ export const media = {
   range: gen + "hf_20261122_013035_43ed28a3-0fd0-4912-b84b-5d4394d0e0e9.png",
 
   // Hero: full-bleed still life with the tub, arched window light, leaf shadows moving. No people.
+  // Hero: a code-drawn loop of collagen fibres (lemo-opuscar flow-field), with the tub laid over it.
+  heroFibresWide: "/video/hero-fibres-wide.mp4",
+  heroFibresWidePoster: "/img/hero/fibres-wide.jpg",
+  heroFibresTall: "/video/hero-fibres-tall.mp4",
+  heroFibresTallPoster: "/img/hero/fibres-tall.jpg",
+  heroTub: "/img/hero/tub.webp",
+  // Clean pack images for the product-page panels.
+  panelBovine: "/img/hero/tub.webp",
+  panelMarine: "/img/original/collagen-marine.jpg",
+  // Earlier still-life hero, kept for reference.
   heroWidePoster: gen + "hf_20261122_012902_adf583cb-8c68-48e5-b81e-077892b17dbe.png",
   heroWideVideo: up + "f1faa049-9f4d-47a5-8442-5e31510ca2d0.mp4",
   heroTallPoster: gen + "hf_20261122_012902_dd9b8ec3-74de-4f05-82da-52634afbd237.png",

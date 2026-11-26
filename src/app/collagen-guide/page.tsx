@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { CollagenCycle } from "@/components/CollagenCycle";
+import { Myths } from "@/components/Myths";
 import { Research } from "@/components/Research";
-import { getGuide, getHome } from "@/lib/content";
+import { getCycle, getGuide, getHome, getMyths } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "The collagen guide",
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function GuidePage() {
-  const [guide, home] = await Promise.all([getGuide(), getHome()]);
+  const [guide, home, cycle, myths] = await Promise.all([getGuide(), getHome(), getCycle(), getMyths()]);
 
   return (
     <>
@@ -50,7 +52,11 @@ export default async function GuidePage() {
         ))}
       </div>
 
+      <CollagenCycle {...cycle} />
+
       <Research {...home.research} />
+
+      <Myths {...myths} />
 
       <section className="wrap py-20 text-center md:py-24">
         <h2 className="text-[48px] md:text-[64px]">Ready to start?</h2>
